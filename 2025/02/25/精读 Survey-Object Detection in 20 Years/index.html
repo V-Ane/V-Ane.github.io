@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Self-Improvement | Self-Improvement</title><meta name="author" content="Vane"><meta name="copyright" content="Vane"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1234567891011title: 精读 Survey-Object Detection in 20 Yearsauthor: Vanecover: &#x27;&#x27;categories:  - 论文精度tags:  - 目标检测  - 深度学习  - 计算机视觉  - 综述date: YYYY-MM-DD HH:MM:SS  更多偏向于个人理解和记录-&gt;如有错误请见谅 1234">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Self-Improvement">
+<meta property="og:url" content="http://example.com/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years/index.html">
+<meta property="og:site_name" content="Self-Improvement">
+<meta property="og:description" content="1234567891011title: 精读 Survey-Object Detection in 20 Yearsauthor: Vanecover: &#x27;&#x27;categories:  - 论文精度tags:  - 目标检测  - 深度学习  - 计算机视觉  - 综述date: YYYY-MM-DD HH:MM:SS  更多偏向于个人理解和记录-&gt;如有错误请见谅 1234">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/touxiang1.jpg">
+<meta property="article:published_time" content="2025-02-25T12:12:20.461Z">
+<meta property="article:modified_time" content="2025-02-25T12:13:46.884Z">
+<meta property="article:author" content="Vane">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/touxiang1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "http://example.com/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years/",
+  "image": "http://example.com/img/touxiang1.jpg",
+  "datePublished": "2025-02-25T12:12:20.461Z",
+  "dateModified": "2025-02-25T12:13:46.884Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Vane",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Self-Improvement',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">Self-Improvement</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-25T12:12:20.461Z" title="发表于 2025-02-25 20:12:20">2025-02-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-25T12:13:46.884Z" title="更新于 2025-02-25 20:13:46">2025-02-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">title: 精读 Survey-Object Detection in 20 Years</span><br><span class="line">author: Vane</span><br><span class="line">cover: &#x27;&#x27;</span><br><span class="line">categories:</span><br><span class="line">  - 论文精度</span><br><span class="line">tags:</span><br><span class="line">  - 目标检测</span><br><span class="line">  - 深度学习</span><br><span class="line">  - 计算机视觉</span><br><span class="line">  - 综述</span><br><span class="line">date: YYYY-MM-DD HH:MM:SS</span><br></pre></td></tr></table></figure>
+
+<p>更多偏向于个人理解和记录-&gt;如有错误请见谅</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">|--引言</span><br><span class="line">|   |--目标检测的定义与重要性</span><br><span class="line">|   |   |--定义：识别图像中特定类别的物体并定位</span><br><span class="line">|   |   |--重要性：为其他视觉任务奠基</span><br><span class="line">|   |--面临的挑战</span><br><span class="line">|   |   |--物体定位挑战</span><br><span class="line">|   |   |--遮挡检测挑战</span><br><span class="line">|   |   |--速度提升挑战</span><br><span class="line">|   |--本文的目的与结构</span><br><span class="line">|   |   |--目的：多视角介绍目标检测技术</span><br><span class="line">|   |   |--结构：按技术发展、速度提升等板块展开</span><br><span class="line">|--20年目标检测技术发展</span><br><span class="line">|   |--发展路线图</span><br><span class="line">|   |   |--传统目标检测时期</span><br><span class="line">|   |   |   |--VJ检测器</span><br><span class="line">|   |   |   |--HOG检测器</span><br><span class="line">|   |   |   |--DPM检测器</span><br><span class="line">|   |   |--深度学习基于检测时期</span><br><span class="line">|   |   |   |--两阶段检测器（RCNN、Faster RCNN等）</span><br><span class="line">|   |   |   |--一阶段检测器（YOLO、SSD等）</span><br><span class="line">|   |--检测数据集和指标</span><br><span class="line">|   |   |--常用数据集</span><br><span class="line">|   |   |   |--PASCAL VOC数据集</span><br><span class="line">|   |   |   |--ImageNet数据集</span><br><span class="line">|   |   |   |--MS-COCO数据集</span><br><span class="line">|   |   |--评估指标</span><br><span class="line">|   |   |   |--早期指标（误报率等）</span><br><span class="line">|   |   |   |--平均精度（AP）</span><br><span class="line">|   |   |   |--平均均值精度（mAP）</span><br><span class="line">|   |--技术演进</span><br><span class="line">|   |   |--多尺度检测技术</span><br><span class="line">|   |   |   |--特征金字塔+滑动窗口</span><br><span class="line">|   |   |   |--基于目标提议的检测</span><br><span class="line">|   |   |   |--深度回归和无锚检测</span><br><span class="line">|   |   |   |--多参考/分辨率检测</span><br><span class="line">|   |   |--上下文线索利用技术</span><br><span class="line">|   |   |   |--利用局部上下文</span><br><span class="line">|   |   |   |--利用全局上下文</span><br><span class="line">|   |   |   |--上下文交互</span><br><span class="line">|   |   |--难例挖掘技术</span><br><span class="line">|   |   |   |--Bootstrap方法</span><br><span class="line">|   |   |   |--深度学习中的难例挖掘</span><br><span class="line">|   |   |--损失函数设计技术</span><br><span class="line">|   |   |   |--分类损失函数</span><br><span class="line">|   |   |   |--定位损失函数</span><br><span class="line">|   |   |--非极大值抑制技术</span><br><span class="line">|   |   |   |--贪心选择</span><br><span class="line">|   |   |   |--边界框聚合</span><br><span class="line">|   |   |   |--基于学习的NMS</span><br><span class="line">|   |   |   |--无NMS检测</span><br><span class="line">|--检测速度提升</span><br><span class="line">|   |--检测流程层面</span><br><span class="line">|   |   |--特征图共享计算</span><br><span class="line">|   |   |--级联检测</span><br><span class="line">|   |--检测器骨干网络层面</span><br><span class="line">|   |   |--网络剪枝与量化</span><br><span class="line">|   |   |--设计轻量级网络</span><br><span class="line">|   |       |--因子分解卷积</span><br><span class="line">|   |       |--分组卷积</span><br><span class="line">|   |       |--深度可分离卷积</span><br><span class="line">|   |       |--瓶颈设计</span><br><span class="line">|   |       |--基于NAS的检测</span><br><span class="line">|   |--数值计算层面</span><br><span class="line">|   |   |--使用积分图像加速</span><br><span class="line">|   |   |--频域加速</span><br><span class="line">|   |   |--向量量化</span><br><span class="line">|--目标检测近期进展</span><br><span class="line">|   |--基于关键点的检测</span><br><span class="line">|   |--旋转和尺度变化的鲁棒检测</span><br><span class="line">|   |   |--旋转鲁棒检测</span><br><span class="line">|   |   |--尺度鲁棒检测</span><br><span class="line">|   |--使用更好的骨干网络</span><br><span class="line">|   |--改进定位精度</span><br><span class="line">|   |   |--边界框优化</span><br><span class="line">|   |   |--新的定位损失函数</span><br><span class="line">|   |--结合分割损失学习</span><br><span class="line">|   |--对抗训练</span><br><span class="line">|   |--弱监督目标检测</span><br><span class="line">|   |   |--多实例学习</span><br><span class="line">|   |   |--类激活映射</span><br><span class="line">|   |--域适应检测</span><br><span class="line">|--结论与未来方向</span><br><span class="line">|   |--研究总结</span><br><span class="line">|   |--未来研究方向</span><br><span class="line">|   |   |--轻量级检测</span><br><span class="line">|   |   |--端到端检测</span><br><span class="line">|   |   |--小目标检测</span><br><span class="line">|   |   |--3D检测</span><br><span class="line">|   |   |--视频检测</span><br><span class="line">|   |   |--跨模态检测</span><br><span class="line">|   |   |--开放世界检测</span><br></pre></td></tr></table></figure>
+
+<h1 id="ABSTRACT"><a href="#ABSTRACT" class="headerlink" title="ABSTRACT"></a><font style="color:rgb(51, 51, 51);">ABSTRACT</font></h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740211264075-79821351-107f-4efc-9698-4399594fb584.png"></p>
+<p><strong><font style="color:rgb(51, 51, 51);">主要的内容在于 里程碑意义的检测器和数据集，检验指标（我的理解是对于任务完成情况的判断的精准判断）检测系统的基本构建块、加速技术以及最近最先进的检测方法。</font></strong></p>
+<h1 id="Ⅰ-INTRODUCTION"><a href="#Ⅰ-INTRODUCTION" class="headerlink" title="Ⅰ INTRODUCTION"></a>Ⅰ INTRODUCTION</h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740211755405-afbf0aba-f43d-4306-a615-cbb35ee76409.png"></p>
+<p>目标检测-&gt;视觉目标-&gt;检测实例</p>
+<p>指标是准确性(分类准确性和定位准确性)和速度</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740214423799-31894063-7145-4bf5-ab66-a128eb9c3b70.png"></p>
+<p>promoted 促进 propel 推进</p>
+<p>目标识别是很多的视觉任务的基础，广泛应用，二十年迅猛发展</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740214730671-223aa934-4745-436f-ae53-62fc07b7977a.png"></p>
+<p>illuminations 照明 rotation旋转  dense and occluded密集和遮挡<img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740214903912-cf8a6e13-1875-4458-ae69-f81350d64130.png"></p>
+<p>不同的检测任务困难点不同</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740215128552-aeda107f-e7b1-4bee-bc57-fbb89b58f7a2.png"></p>
+<p>novices 新手  evolution.演变 clue 线索</p>
+<p>这段的内容和abstract里说的内容差不多，所以没什么需要细说的</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740215443674-c798c6a6-7290-43fa-a5b1-814dc47d6110.png"></p>
+<p>分别说了一下论文的各个部分</p>
+<h1 id="Ⅱ-OBJECT-DETECTION-IN-20-YEARS"><a href="#Ⅱ-OBJECT-DETECTION-IN-20-YEARS" class="headerlink" title="Ⅱ OBJECT DETECTION IN 20 YEARS"></a>Ⅱ OBJECT DETECTION IN 20 YEARS</h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740217376122-f9835ca9-1602-4f42-b4a1-4d8cc13b49ae.png"></p>
+<p>从多个角度回顾对象检测的历史，包括里程碑检测器、数据集、指标和关键技术的演变</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740217397976-aebe4078-f1bd-46be-a528-ed924d5fa0db.png"></p>
+<h2 id="A-A-Road-Map-of-Object-Detection"><a href="#A-A-Road-Map-of-Object-Detection" class="headerlink" title="A. A Road Map of Object Detection"></a>A. A Road Map of Object Detection</h2><h3 id="Traditional-Detectors"><a href="#Traditional-Detectors" class="headerlink" title="Traditional Detectors"></a>Traditional Detectors</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740218167494-0d0d17d8-4d58-4ac7-850a-3a3623c6d38e.png"></p>
+<p>ingenious 精巧的  perspective 观点，视角 algorithms算法  handcrafted手工制作 sophisticated复杂的</p>
+<p>简而言之，我们要参考之前因为算力不足而创造的一系列有用的高效率技巧</p>
+<h4 id="Viola-Jones-Detectors"><a href="#Viola-Jones-Detectors" class="headerlink" title="Viola Jones Detectors"></a>Viola Jones Detectors</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740219112955-19397e91-36bf-4bd2-b408-16fa42f54b06.png"></p>
+<p><font style="color:rgb(34, 34, 38);">Viola-Jones滑动窗口的算法，在sectionⅢ继续探讨</font></p>
+<h4 id="HOG-Detector"><a href="#HOG-Detector" class="headerlink" title="HOG Detector"></a><font style="color:rgba(0, 0, 0, 0.85);">HOG Detector</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740219443154-163bd714-5bfc-4ffc-9398-25ae187e89db.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740219456133-3e6f8741-0c94-488c-b2b6-3dee6f3ad9b9.png"></p>
+<p>Histogram of Oriented Gradients 定向梯度直方图</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);"> scale - invariant（尺度不变性）能够在目标物体的大小（尺度）发生变化的情况下，仍然可以有效地识别、描述或者处理这个目标</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">To balance the feature invariance (including translation, scale, illumination, etc) and the nonlinearity</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">平衡特征不变性（包括平移、尺度、照明等）和非线性</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">uniform 均匀</font></p>
+<h4 id="Deformable-Part-based-Model-DPM"><a href="#Deformable-Part-based-Model-DPM" class="headerlink" title="Deformable Part-based Model (DPM)"></a><font style="color:rgba(0, 0, 0, 0.85);">Deformable Part-based Model (DPM)</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740221227360-4184d531-f1e2-4f5c-a5da-b039d276b7c3.png"></p>
+<p>DPM是HOG的plus，是分而治之造成的拓展</p>
+<p>找一辆车-&gt;找车的部件（轮子窗户车体）类似这种操作</p>
+<p>纵使现在的深度学习的模型元远远超过之前的模型，但是也有深远影响</p>
+<h3 id="CNN-based-Two-stage-Detectors"><a href="#CNN-based-Two-stage-Detectors" class="headerlink" title="CNN based Two-stage Detectors"></a>CNN based Two-stage Detectors</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740225085355-0e6baf5e-be7f-4708-8c55-775498a683f3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740225102575-92078a29-6bbf-429c-9ed6-d6ac58e09a19.png"></p>
+<p>两种类型，双阶段探测器和单阶段探测器</p>
+<h4 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740225145622-d0535272-f98b-4e23-bb65-ddbf8ead021f.png"></p>
+<p>region 区域 redundant多余的</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">RCNN 背后的理念很简单：</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">它首先通过选择性搜索提取一组目标候选框（目标建议框）。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">然后，将每个候选框重新缩放为固定大小的图像，并输入到在 ImageNet 数据集上预训练好的卷积神经网络（CNN）模型中（例如 AlexNet 模型，参考文献 [35]）来提取特征。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">最后，使用线性支持向量机（SVM）分类器来预测每个区域内是否存在目标，并识别目标的类别。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">尽管 RCNN 取得了很大进展，但其缺点也很明显：对大量重叠的候选框（一张图像中超过 2000 个框）进行冗余的特征计算，导致检测速度极慢（使用 GPU 时每张图像需要 14 秒）。同年晚些时候，空间金字塔池化网络（SPPNet，参考文献 [17]）被提出，并且解决了这个问题。</font></p>
+<h4 id="SPPNet"><a href="#SPPNet" class="headerlink" title="SPPNet"></a>SPPNet</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740227287519-71bd79b8-9603-4362-a342-966d55959df4.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740227301962-075b101a-c0dd-42bb-8863-f242065dca57.png"></p>
+<p>以前的 CNN 模型需要固定大小的输入，例如，AlexNet 的 224x224 图像 [35]。</p>
+<p>SPPNet 的主要贡献是引入了空间金字塔池 （SPP） 层，它使 CNN 能够生成固定长度的表示，而不管图像&#x2F;感兴趣区域的大小如何，而无需重新缩放。</p>
+<p>当使用 SPPNet 进行目标检测时，只需从整个图像中计算一次特征图，然后可以生成任意区域的固定长度表示来训练检测器，从而避免了重复计算卷积特征。</p>
+<p>SPPNet 比 R-CNN 快 20 倍以上，且不牺牲任何检测准确度 （VOC07 mAP&#x3D;59.2%）。虽然 SPPNet 有效地提高了检测速度，</p>
+<p>但它仍然存在一些缺点：首先，训练仍然是多阶段的，其次，SPPNet 只微调其全连接层，而简单地忽略了之前的所有层。第二年晚些时候，Fast RCNN [18] 被提出并解决了这些问题。</p>
+<h4 id="Fast-RCNN"><a href="#Fast-RCNN" class="headerlink" title="Fast RCNN"></a>Fast RCNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740227509121-cad712db-f042-4519-a401-fe92e9e4fe54.png"></p>
+<p>Fast RCNN 使我们能够在相同的网络配置下同时训练检测器和边界框回归器。</p>
+<p>在 VOC07 数据集上，Fast RCNN 将 mAP 从 58.5% （RCNN） 提高到 70.0%，同时检测速度比 R-CNN 快 200 倍以上。</p>
+<p>但其检测速度仍然受到候选框生成的限制。然后，自然而然地出现了一个问题：“我们可以使用 CNN 模型生成对象候选框吗？</p>
+<h4 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster RCNN"></a>Faster RCNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740229161115-fa886bb7-454a-45f9-851f-41810d98303c.png"></p>
+<p>Faster RCNN 是第一个近实时深度学习检测器（COCO mAP@.5&#x3D;42.7%，VOC07 mAP&#x3D;73.2%，使用 ZF-Net [48] 时为 17fps）。</p>
+<p>Faster-RCNN 的主要贡献是引入了区域提案网络 （RPN），它支持几乎免费的区域提案。</p>
+<p>从 R-CNN 到 Faster RCNN，对象检测系统的大多数单个块，例如建议检测、特征提取、边界框回归等，已逐渐集成到一个统一的端到端学习框架中。</p>
+<p>虽然 Faster RCNN 突破了 Fast RCNN 的速度瓶颈，但在后续检测阶段仍然存在计算冗余。</p>
+<h4 id="Feature-Pyramid-Networks-FPN"><a href="#Feature-Pyramid-Networks-FPN" class="headerlink" title="Feature Pyramid Networks (FPN)"></a>Feature Pyramid Networks (FPN)</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740229305896-1a144c2e-54f3-4e57-9933-1da4c6e6dbc9.png"></p>
+<p>conducive 有益于 To this end为此</p>
+<p>特征金字塔网络 （FPN）</p>
+<p>在 FPN 之前，大多数基于深度学习的检测器仅在网络顶层的特征图上运行检测。尽管 CNN 更深层中的特征有利于类别识别，但不利于定位对象。</p>
+<p>为此，FPN 中开发了一种具有横向连接的自上而下的架构，用于构建各种规模的高级语义。</p>
+<p>由于 CNN 通过其前向传播自然形成特征金字塔，因此 FPN 在检测具有各种尺度的物体方面取得了巨大进步。</p>
+<p>在基本的 Faster R-CNN 系统中使用 FPN，它在 COCO 数据集上实现了最先进的单模型检测结果，没有花里胡哨 。FPN 现在已成为许多最新检测器的基本构建块</p>
+<h3 id="Milestones-CNN-based-One-stage-Detectors"><a href="#Milestones-CNN-based-One-stage-Detectors" class="headerlink" title="Milestones: CNN based One-stage Detectors"></a><font style="color:rgba(0, 0, 0, 0.85);">Milestones: CNN based One-stage Detectors</font></h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740229610389-7b66a268-824b-4076-9f08-f1a403027e54.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740229626127-8dd78546-b2a1-48e4-953d-dac149c6501a.png"></p>
+<p>without any bells and whistles 没有花里胡哨</p>
+<h4 id="You-Only-Look-Once-YOLO"><a href="#You-Only-Look-Once-YOLO" class="headerlink" title="You Only Look Once (YOLO)"></a>You Only Look Once (YOLO)</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740231712234-9b7f1262-b6a6-4a43-b0ea-b8082f033af4.png"></p>
+<p>yolo 快，不断更迭，主要是小物体和密集，目标检测精度相比于两阶段有所调整</p>
+<p>YOLO 遵循与两阶段检测器完全不同的范式：将单个神经网络应用于完整图像。该网络将图像划分为多个区域，并同时预测每个区域的边界框和概率</p>
+<h4 id="Single-Shot-MultiBox-Detector-SSD"><a href="#Single-Shot-MultiBox-Detector-SSD" class="headerlink" title="Single Shot MultiBox Detector (SSD)"></a>Single Shot MultiBox Detector (SSD)</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740232651851-47139e32-e6e4-4bf8-a079-d183514b0c04.png"></p>
+<p>多参考和多分辨率检测技术（将在 II-C1 节中介绍），这显着提高了单级探测器的检测精度，特别是对于一些小物体</p>
+<p>SSD 在网络的不同层上检测不同比例的物体，而以前的检测器只在其顶层运行检测</p>
+<h4 id="RetinaNet"><a href="#RetinaNet" class="headerlink" title="RetinaNet"></a>RetinaNet</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740233234973-c19c8d8c-8933-4224-a637-1e97c93625f0.png"></p>
+<p>重塑交叉熵损失函数来得到更好的对密集目标的分类</p>
+<h4 id="CornerNet"><a href="#CornerNet" class="headerlink" title="CornerNet"></a>CornerNet</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740233539851-d7f5d1ec-89a7-4930-9276-e1d36340e67f.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740233844856-f376012a-f1eb-41af-ac3a-155de701b3e3.png"></p>
+<p>以前的方法主要使用锚框来提供分类和回归参考。物体经常在数量、位置、比例、比率等方面表现出变化。他们必须遵循设置大量参考框的路径，以更好地匹配基本实况，以实现高性能。然而，该网络将遭受进一步的类别不平衡、大量手动设计的超参数和较长的收敛时间。为了解决这些问题，H. Law 等 [26] 放弃了以前的检测范式，将任务视为关键点（盒子的角落）预测问题。获取关键点后，它将使用额外的 emadding 信息对角点进行解耦和重新分组，形成边界框。CornerNet 的性能优于当时大多数单级检测器 （COCO mAP@.5&#x3D;57.8%）</p>
+<h4 id="CenterNet"><a href="#CenterNet" class="headerlink" title="CenterNet"></a>CenterNet</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740233993089-50f636a1-1c39-46fc-9a58-dc67656d6761.png"></p>
+<p>遵循基于关键点的检测范式，但消除了昂贵的后处理，例如基于组的关键点分配（在 CornerNet [26]、ExtremeNet [53] 等中）和 NMS，从而形成一个完全端到端的检测网络。CenterNet 将对象视为单个点（对象的中心），并根据参考中心点回归其所有属性（例如大小、方向、位置、姿势等）。该模型简单而优雅，可以将 3D 对象检测、人体姿态估计、光流学习、深度估计和其他任务集成到一个框架中。尽管使用了如此简洁的检测概念，CenterNet 也可以获得比较的检测结果 （COCO mAP@.5&#x3D;61.1%）</p>
+<h4 id="DETR"><a href="#DETR" class="headerlink" title="DETR"></a>DETR</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740234114655-bc2f14fa-25f0-47bb-b259-5914604bf97c.png"></p>
+<p>近年来，Transformers 深刻影响了整个深度学习领域，尤其是计算机视觉领域。Transformers 摒弃了传统的卷积算子，转而采用仅注意计算，以克服 CNN 的局限性并获得全局尺度的感受野。2020 年，N. Carion 等人提出了 DETR [28]，他们将目标检测视为一个集合预测问题，并提出了一个带有 Transformers 的端到端检测网络。到目前为止，对象检测已经进入了一个新时代，在这个时代，无需使用锚框或锚点即可检测对象。后来，X. Zhu et al 提出了可变形 DETR [43] 来解决 DETR 收敛时间长和检测小物体性能受限的问题。它在 MSCOCO 数据集上实现了最先进的性能 （COCO mAP@.5&#x3D;71.9%）。</p>
+<p>注意力机制的引入</p>
+<h2 id="B-Object-Detection-Datasets-and-Metrics"><a href="#B-Object-Detection-Datasets-and-Metrics" class="headerlink" title="B. Object Detection Datasets and Metrics"></a>B. Object Detection Datasets and Metrics</h2><h3 id="Datasets"><a href="#Datasets" class="headerlink" title="Datasets"></a>Datasets</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740291738328-eab8173f-5cbf-4143-894b-78a3e5ec7189.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740291757064-40017c67-7c21-4cd0-b2a6-b6fda60e7710.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740291770962-43885b45-9f1b-4860-996e-570cbd753a24.png"></p>
+<p>感觉文章本身就对title介绍的太多，直接总结一下相对的内容</p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">Pascal VOC</font></strong><font style="background-color:rgb(249, 250, 251);">：是早期计算机视觉领域重要竞赛，常用版本为 VOC07 和 VOC12，其中 VOC07 包含 5k 训练图像和 12k 注释对象，VOC12 包含 11k 训练图像和 27k 注释对象，两个数据集均标注了 20 种生活中常见的物体类别</font><font style="background-color:rgb(249, 250, 251);">1</font><font style="background-color:rgb(249, 250, 251);">。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">ILSVRC</font></strong><font style="background-color:rgb(249, 250, 251);">：即 ImageNet 大规模视觉识别挑战赛，从 2010 年至 2017 年每年举办，其检测数据集包含 200 类视觉对象，图像 &#x2F; 对象实例数量比 VOC 多两个数量级，推动了通用目标检测技术的发展</font><font style="background-color:rgb(249, 250, 251);">2</font><font style="background-color:rgb(249, 250, 251);">。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">MS-COCO</font></strong><font style="background-color:rgb(249, 250, 251);">：是当今具有挑战性的目标检测数据集，自 2015 年起每年基于该数据集举办竞赛。它的对象类别数量比 ILSVRC 少，但对象实例更多，例如 MS-COCO-17 包含 164k 图像和 897k 来自 80 个类别的注释对象。此外，该数据集不仅有边界框注释，还对每个对象进行了实例分割标注，并且包含更多小物体和密集物体，已成为目标检测领域的事实上的标准</font><font style="background-color:rgb(249, 250, 251);">3</font><font style="background-color:rgb(249, 250, 251);">。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">Open Images</font></strong><font style="background-color:rgb(249, 250, 251);">：2018 年推出，规模空前，包含标准目标检测和视觉关系检测两个任务。对于标准检测任务，数据集由 1,910k 图像组成，有 15,440k 注释边界框，涉及 600 个对象类别</font><font style="background-color:rgb(249, 250, 251);">4</font><font style="background-color:rgb(249, 250, 251);">。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">Objects365</font></strong><font style="background-color:rgb(249, 250, 251);">：文中未详细介绍其特点，仅给出了数据统计信息，如 Objects365-2019 的训练集包含 600,000 张图像和 9,623,000 个对象，验证集包含 38,000 张图像和 479,000 个对象，测试集包含 100,000 张图像和 1,700,000 个对象</font><font style="background-color:rgb(249, 250, 251);">5</font><font style="background-color:rgb(249, 250, 251);">。</font></p>
+<h3 id="How-can-we-evaluate-the-accuracy-of-a-detector-（评价指标）"><a href="#How-can-we-evaluate-the-accuracy-of-a-detector-（评价指标）" class="headerlink" title="How can we evaluate the accuracy of a detector?（评价指标）"></a>How can we evaluate the accuracy of a detector?（评价指标）</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740291861015-74ebc51b-ebd3-4c82-9758-e61262858fcb.png"></p>
+<p>早期没有被广泛接受的detector评价指标 </p>
+<p>(miss rate vs. false positives per window漏检率与每窗口误报数的对比)FPPW-&gt;早期行人检测</p>
+<p>false positives 假阳性-&gt;窗口中没有某种特征但是判定为了有某种特征</p>
+<p>miss rate 漏检率-&gt;窗口中有某种特征但是并没有检测出来</p>
+<p>per-window 有弊端不能预测整图-&gt;信息不完整可能是检测目标的一部分，物体在两个窗口的边界可能会被扭曲撕裂，只注意局部特征而忽略全局，动态变化无法捕捉</p>
+<p>introduce出了FPPI(<font style="color:rgba(0, 0, 0, 0.85);">False Positives per Image每图像假阳性数</font>)-&gt;<font style="color:rgba(0, 0, 0, 0.85);">用假阳性的数量除以图像的总数量。即 FPPI &#x3D; FP &#x2F; N，其中 N 表示数据集里图像的总数</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740293611861-36ba778e-0906-4714-9a81-b917e81c443f.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740293627480-aff11491-cf1d-4cd9-84b8-21a619ac7e14.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740294487467-cc42b25d-c62a-499d-bf66-a98434952537.png"></p>
+<p>细嗦一下这个评价标准的内容</p>
+<h4 id="IoU（Intersection-over-union）"><a href="#IoU（Intersection-over-union）" class="headerlink" title="IoU（Intersection over union）"></a><font style="color:rgb(25, 27, 31);">IoU（Intersection over union）</font></h4><p>两者重叠区域(交集)占两者总区域的比例(并集)  -&gt; loU &#x3D; area of overlap &#x2F; area of union</p>
+<p><font style="color:rgb(25, 27, 31);">人工标注的矩形框的IoU值大于某个阈值时（通常为0.5）即认为我们的模型输出了正确的</font></p>
+<h4 id="Precision-精确率-and-Recall-召回率"><a href="#Precision-精确率-and-Recall-召回率" class="headerlink" title="Precision(精确率) and Recall(召回率)"></a><font style="color:rgb(25, 27, 31);">Precision(精确率) and </font>Recall(召回率)</h4><p><font style="color:rgb(25, 27, 31);">假设我们有一组图片，里面有若干待检测的目标，Precision就代表我们模型检测出来的目标有多打比例是真正的目标物体，Recall就代表所有真实的目标有多大比例被我们的模型检测出来了。</font></p>
+<p><font style="color:rgb(25, 27, 31);">TP（True Positives)：真正例，预测为正例而且实际上也是正例；</font></p>
+<p><font style="color:rgb(25, 27, 31);">FP（False Positives)：假正例，预测为正例然而实际上却是负例；</font></p>
+<p><font style="color:rgb(25, 27, 31);">FN（false Negatives)：假负例，预测为负例然而实际上却是正例；</font></p>
+<p><font style="color:rgb(25, 27, 31);">TN（True Negatives)：真负例，预测为负例而且实际上也是负例。</font></p>
+<p><font style="color:rgb(25, 27, 31);"></font></p>
+<p><strong><font style="color:rgb(77, 77, 77);">准确率（accuracy）   &#x3D; （TP+TN）&#x2F; (TP+FP+TN+FN)  -&gt;</font>****<font style="color:rgb(77, 77, 77);">模型预测的结果中，预测正确的比率</font></strong></p>
+<p><strong><font style="color:rgb(77, 77, 77);">精确率（precision）&#x3D;   TP&#x2F;(TP+FP)                           -&gt;模型预测为正例的样本中，预测正确的比例</font></strong></p>
+<p><strong><font style="color:rgb(77, 77, 77);">召回率（recall）      &#x3D;    TP&#x2F;(TP+FN)                           -&gt;样本预测为正例的个数，占样本真实正例个数比例。通俗来讲就是所有真实正例中，被预测成了正例比例</font></strong></p>
+<p><strong><font style="color:rgb(77, 77, 77);"></font></strong></p>
+<p><strong><font style="color:rgb(77, 77, 77);">PR曲线 </font></strong></p>
+<p><font style="color:rgb(77, 77, 77);">以召回率（recall）为横轴，精确率（precision）为纵轴，调整模型阈值，获得的一个曲线</font></p>
+<p><font style="color:rgb(77, 77, 77);">前一步得到的 Precision-Recall 曲线，计算曲线下的面积即为 AP 值</font></p>
+<p><font style="color:rgb(25, 27, 31);">在实际应用中，我们并不直接对该PR曲线进行计算，而是对PR曲线进行平滑处理。即对PR曲线上的每个点，Precision的值取该点右侧最大的Precision的值</font><strong><font style="color:rgb(77, 77, 77);"><br></font>****<font style="color:rgb(77, 77, 77);"> </font></strong><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740297047060-8b4fb943-37f5-48bb-ba4f-563efa7f30bb.png"></p>
+<p><font style="color:rgb(77, 77, 77);">计算其他所有类的 AP，最后取平均值即为 mAP</font></p>
+<p><font style="color:rgb(77, 77, 77);"></font></p>
+<h2 id="C-Technical-Evolution-in-Object-Detection"><a href="#C-Technical-Evolution-in-Object-Detection" class="headerlink" title="C. Technical Evolution in Object Detection"></a><font style="color:rgb(77, 77, 77);">C. Technical Evolution in Object Detection</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740298298840-a872037b-0a7e-47c3-b293-d3eaf4b44715.png"></p>
+<p>构建块和技术演变</p>
+<p>多尺度</p>
+<p>上下文启动</p>
+<p>样本选择策略</p>
+<p>训练过程中损失函数的设计</p>
+<h3 id="Technical-Evolution-of-Multi-Scale-Detection"><a href="#Technical-Evolution-of-Multi-Scale-Detection" class="headerlink" title="Technical Evolution of Multi-Scale Detection"></a>Technical Evolution of Multi-Scale Detection</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740298866732-b2d475ba-8c0d-418c-b43b-09ea85aa79ff.png"></p>
+<p>.<img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740298892827-4e4e38dc-f91d-4d14-bcaa-5dd4737f0777.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740298909539-94861285-1806-4cde-ba99-4723610671de.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">目标检测任务中，图像里的物体往往具有不同的尺寸和长宽比，比如远处的行人看起来较小，而近处的车辆可能更大且长宽比各异。多尺度检测就是要解决在各种尺度下准确检测出这些物体的问题，它是目标检测领域的关键技术难题。</font></p>
+<h4 id="Feature-pyramids-sliding-windows-特征金字塔-滑动窗口"><a href="#Feature-pyramids-sliding-windows-特征金字塔-滑动窗口" class="headerlink" title="Feature pyramids + sliding windows(特征金字塔+滑动窗口)"></a><font style="color:rgba(0, 0, 0, 0.85);">Feature pyramids + sliding windows(特征金字塔+滑动窗口)</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740299610691-6b129183-a885-4cf6-9879-f7c3ffdfcc04.png"></p>
+<p>嘶……等后面再写一篇代码复现这个内容吧，一时半会感觉说不了太清晰</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">图像在不同尺度下进行特征提取的结构。通过对原始图像进行多次下采样操作，得到不同分辨率的图像层级，每个层级都能捕捉到不同尺度的特征信息。滑动窗口则是在图像或其特征图上，以固定大小的窗口按照一定步长进行逐像素滑动。在滑动过程中，对每个窗口内的内容进行分析，判断其中是否包含目标物体。将特征金字塔与滑动窗口相结合，就是在特征金字塔的各个层级上都应用滑动窗口技术，利用不同层级特征对不同尺度目标进行检测。低层级特征图分辨率高，适合检测小目标；高层级特征图分辨率低，但感受野大，能检测大目标</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);"></font></p>
+<h4 id="Detection-with-object-proposals-基于目标提议的检测"><a href="#Detection-with-object-proposals-基于目标提议的检测" class="headerlink" title="Detection with object proposals(基于目标提议的检测)"></a><font style="color:rgba(0, 0, 0, 0.85);">Detection with object proposals(</font><font style="color:rgba(0, 0, 0, 0.85);">基于目标提议的检测</font><font style="color:rgba(0, 0, 0, 0.85);">)</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740300736960-965081b0-82e8-4708-b578-89c27170fb6b.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">目标提议是指一组可能包含物体的类别无关的参考框。基于目标提议的检测方法，核心是先生成这些可能包含物体的提议框，然后对这些提议框进行后续处理，判断其中是否真的存在目标物体以及物体的类别</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">慢-&gt;one-step Detector提出造成这种被淡忘</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);"></font></p>
+<h4 id="Deep-regression-and-anchor-free-detection-深度回归和无锚检测"><a href="#Deep-regression-and-anchor-free-detection-深度回归和无锚检测" class="headerlink" title="Deep regression and anchor-free detection(深度回归和无锚检测)"></a><font style="color:rgba(0, 0, 0, 0.85);">Deep regression and anchor-free detection(深度回归和无锚检测)</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740301303415-49e67bb5-f81e-4b18-b0d5-36903361789d.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740301326493-64643edc-1692-42a8-8e6d-63807778f8fd.png"></p>
+<p>brute-force 蛮力   coordinates 坐标 </p>
+<p>一种是基于组的方法，它检测关键点（角、中心或代表点），然后进行对象分组 </p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">这种方法首先会对图像中的关键点进行检测，这些关键点可以是物体的角点（比如矩形物体的四个角）、中心点（物体的几何中心位置）或者其他具有代表性的点（能够代表物体特征和位置的特殊点） 。通过检测这些关键点，获取物体的关键位置信息。在检测到关键点之后，基于组的方法会执行对象分组操作。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);"></font></p>
+<p>另一种是无组方法，它将一个对象视为一个&#x2F;多个点，然后在点的引用下回归对象属性（大小、比率等）。</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">无组方法将一个对象直接视为一个或多个点，不进行像基于组的方法那样的分组操作。以这些点为参考，直接回归出物体的属性，如大小（物体的长度、宽度、高度等尺寸信息）、比率（长宽比等比例关系） 等。比如，将物体的中心视为一个点，然后以这个中心点为基准，预测出物体的大小、比例等属性，进而确定物体的边界框。这种方法简化了检测流程，避免了复杂的分组计算，使得检测过程更加直接高效。在一些实时性要求较高的场景，这种方法可以快速给出检测结果。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);"></font></p>
+<h4 id="Multi-reference-resolution-detection-多参考-多分辨率检测"><a href="#Multi-reference-resolution-detection-多参考-多分辨率检测" class="headerlink" title="Multi-reference&#x2F;-resolution detection(多参考 &#x2F; 多分辨率检测)"></a><font style="color:rgba(0, 0, 0, 0.85);">Multi-reference&#x2F;-resolution detection(</font><font style="color:rgba(0, 0, 0, 0.85);">多参考 &#x2F; 多分辨率检测)</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740302316527-62a07dd7-5fd6-499e-aa10-0f730cfd2762.png"></p>
+<p>多参考检测的主要思想是首先在图像的每个位置定义一组参考（又名锚点，包括框和点），然后根据这些参考预测检测框。</p>
+<p>另一种流行的技术是多分辨率检测 ，即在网络的不同层检测不同比例的物体。</p>
+<h3 id="Technical-Evolution-of-Context-Priming"><a href="#Technical-Evolution-of-Context-Priming" class="headerlink" title="Technical Evolution of Context Priming"></a>Technical Evolution of Context Priming</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740303374719-0be7f06d-1032-4182-ac39-c97ffd87d55b.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740303356609-7c0be734-3293-4390-8134-d0e49ee11884.png"></p>
+<p>perception and cognition 感知和认知</p>
+<p>通过人脑的这种原理，把环境和视觉目标相联系起来来进行预测，上下文连接起来进行改善预测</p>
+<h4 id="Detection-with-local-context"><a href="#Detection-with-local-context" class="headerlink" title="Detection with local context"></a>Detection with local context</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740303491381-2d612bcf-bfd7-4c2f-8c8d-50c19ba3e06b.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740303503207-ef270e47-045d-4716-9ffb-c1c7c6bb3604.png"></p>
+<p>inclusion 包含    contextual regions上下文区域    contour 轮廓   incorporating结合</p>
+<p>简单的增加一些背景信息会对目标检测有很好的效果</p>
+<h4 id="Detection-with-global-context"><a href="#Detection-with-global-context" class="headerlink" title="Detection with global context"></a>Detection with global context</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740303778744-07d3c6cb-e903-4ac2-bb6e-58de659265dc.png"></p>
+<p>comprise 构成  attention based mechanisms 注意力机制</p>
+<p>第一种方法是利用深度卷积、扩张卷积、可变形卷积、池化作来接收一个大的感受野（甚至比输入图像还要大）</p>
+<p>第二种方法是将全局上下文视为一种顺序信息，并使用递归神经网络对其进行学习</p>
+<h4 id="Context-interactive"><a href="#Context-interactive" class="headerlink" title="Context interactive"></a>Context interactive</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740305085306-c12c10fc-1f54-4f62-9e09-bc003fbc505e.png"></p>
+<p>interact 交互</p>
+<p>最近的一些改进可以分为两类</p>
+<p>第一类是探索单个对象之间的关系 </p>
+<p>第二类是探索对象和场景之间的依赖关系</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><h5 id="关注层面："><a href="#关注层面：" class="headerlink" title="关注层面："></a>关注层面：</h5><p>Detection with local context：<font style="color:rgba(0, 0, 0, 0.85);">聚焦于待检测物体周围的直接区域信息，范围局限在物体周边，主要利用紧邻物体的视觉信息辅助检测，关注点是物体本身及其周边紧邻环境</font></p>
+<p>Detection with global context：<font style="color:rgba(0, 0, 0, 0.85);">着眼于整个场景的配置信息，将场景作为一个整体来考虑，通过整合场景元素的统计特征或利用网络获取大感受野来捕捉场景的全局特征，范围涵盖整个场景</font></p>
+<p>Context interactive：<font style="color:rgba(0, 0, 0, 0.85);">关注的是视觉元素之间的相互关系，既包括物体与物体之间，也包括物体与场景之间的约束和依赖关系，强调元素之间的互动影响，而非单纯的空间区域信息</font></p>
+<h5 id="实现："><a href="#实现：" class="headerlink" title="实现："></a>实现：</h5><p>Detection with local context：<font style="color:rgba(0, 0, 0, 0.85);">扩大网络感受野或增大目标提议的大小</font></p>
+<p>Detection with global context：<font style="color:rgba(0, 0, 0, 0.85);">利用卷积操作获得大感受野，或者采用基于注意力的机制获取全图感受野，也可以将全局上下文当作顺序信息，用循环神经网络学习</font></p>
+<p>Context interactive：<font style="color:rgba(0, 0, 0, 0.85);">索物体间的关系以及物体与场景间的依赖关系来改进检测。对于物体间关系，挖掘不同物体之间的关联；对于物体与场景的依赖，分析物体在场景中的位置、分布等关系</font></p>
+<h3 id="Technical-Evolution-of-Hard-Negative-Mining"><a href="#Technical-Evolution-of-Hard-Negative-Mining" class="headerlink" title="Technical Evolution of Hard Negative Mining"></a>Technical Evolution of Hard Negative Mining</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740316156541-c204733f-4acf-41aa-ac0a-dbd54a566d43.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740316505665-20c23456-db4f-440d-b6bc-d9b89885fa55.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">难例挖掘的技术演进</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">it means 窗口扫描这种会扫出很多无关的背景信息，这在训练过程中可能会造成负面影响</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740316902645-d028bd08-a422-4975-bdba-93677c0110b4.png"></p>
+<h4 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h4><p>Bootstrap : <font style="color:rgba(0, 0, 0, 0.85);">逐步引入更具挑战性的样本，让模型逐渐适应并学习如何区分困难的背景样本和目标样本</font></p>
+<h4 id="Focal-Loss"><a href="#Focal-Loss" class="headerlink" title="Focal Loss"></a><font style="color:rgba(0, 0, 0, 0.85);">Focal Loss</font></h4><p>Focal Loss : 难处理的提高其权重</p>
+<h3 id="Technical-Evolution-of-Loss-Function"><a href="#Technical-Evolution-of-Loss-Function" class="headerlink" title="Technical Evolution of Loss Function"></a>Technical Evolution of Loss Function</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740317456551-fc793f2b-80aa-4e87-98e0-eb47c20bd288.png"></p>
+<p>deviation 偏差  backpropagation 反向传播  supervision 监督  seeing Eq. 1.  参见方程  1</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740317767767-d3635ceb-2d28-4223-9a27-4e5751121a9a.png"></p>
+<p> t 和 t∗ 是预测边界框和真实边界框的位置</p>
+<p>p 和 p∗ 是它们的类别概率</p>
+<p>IoU{a， a∗} 是参考框&#x2F;点 a 与其真实 a∗ 之间的 IoU</p>
+<p>η 是 IoU 阈值</p>
+<p>Classification loss</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740318365022-f3690ec3-cfb6-4359-be99-cbd4f59ec0dc.png"></p>
+<p>divergence  背离    </p>
+<p>Localization loss</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740318393273-77d1a9eb-e372-4941-876e-6f3c5e2d33af.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740318414975-0dc78e3d-dfde-44f0-80c3-3578dffcc261.png"></p>
+<p>损失函数的技术演变是目标检测领域不断发展的重要体现，以下是详细介绍：</p>
+<h4 id="L1-loss-和-L2-loss"><a href="#L1-loss-和-L2-loss" class="headerlink" title="L1 loss 和 L2 loss"></a>L1 loss 和 L2 loss</h4><p>L1 loss（平均绝对误差，MAE）：</p>
+<p>原理：计算预测值和真实值之差的绝对值之和。即对于一组预测值和真实值的样本对，将每个样本的预测值与真实值相减，取绝对值后再求和。公式为 <img src="https://cdn.nlark.com/yuque/__latex/94344f388ac949b1b3ba0ea83d82221f.svg" alt="image">，其中 <img src="https://cdn.nlark.com/yuque/__latex/df378375e7693bdcf9535661c023c02e.svg" alt="image"> 是样本数量，<img src="https://cdn.nlark.com/yuque/__latex/54507b6bac465d8afb0e218ccbf31b59.svg" alt="image"> 是真实值，<img src="https://cdn.nlark.com/yuque/__latex/80b003aee21c8272a2380fcf1b495811.svg" alt="image"> 是预测值。</p>
+<p>优势：L1 loss 的优势在于对异常值不敏感，因为它只关注误差的绝对值，而不是误差的平方。所以在数据中存在少量异常值的情况下，L1 loss 能够相对更稳定地反映模型的预测误差。</p>
+<p>不足：其导数为常数，这意味着在训练后期，当误差很小时，如果学习率不变，损失函数可能会在稳定值附近波动，难以收敛到更高精度。并且 L1 loss 在某些情况下可能会导致模型的解不够精确，因为它对所有的误差都一视同仁，没有考虑误差的方向。</p>
+<p>L2 loss（均方误差，MSE）：</p>
+<p>原理：计算预测值和真实值之差的平方和。即对于每个样本，将预测值与真实值相减后平方，然后对所有样本的平方差求和。公式为 <img src="https://cdn.nlark.com/yuque/__latex/b9e80b67926b16f2898c8ddf51bbed40.svg" alt="image">。</p>
+<p>优势：MSE 是一种常用的损失函数，它对误差进行了平方处理，使得较大的误差会被放大，从而让模型更加关注较大的误差，有助于提高模型的精度。</p>
+<p>不足：在差值很大时，其导数也非常大，可能导致训练初期的不稳定。并且由于对误差进行了平方处理，MSE 对异常值比较敏感，一个较大的异常值可能会对损失函数的值产生较大的影响，从而影响模型的训练。</p>
+<h4 id="Smooth-L1-loss"><a href="#Smooth-L1-loss" class="headerlink" title="Smooth L1 loss"></a>Smooth L1 loss</h4><p>在差值较小时表现为 L2 loss，具有平滑的导数，有助于模型在训练后期稳定收敛；在差值较大时则表现为 L1 loss防止梯度爆炸</p>
+<p>公式通常表示为 <img src="https://cdn.nlark.com/yuque/__latex/5bc4bf39b14b413fb23f6d5cd4c21206.svg" alt="image"></p>
+<p>其中 <img src="https://cdn.nlark.com/yuque/__latex/712ecf7894348e92d8779c3ee87eeeb0.svg" alt="image"> 是预测值与真实值的差值。</p>
+<p>局限性：仍然存在一些不足，比如坐标分别计算，将预测框的 <img src="https://cdn.nlark.com/yuque/__latex/712ecf7894348e92d8779c3ee87eeeb0.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/bf98c0ddcbe9c1e535f767c78c3aa813.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/c9b08ae6d9fed72562880f75720531bc.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/67df0f404d0960fadcc99f6258733f22.svg" alt="image"> 分别回归，当成 4 个不同的对象处理，没有将边界框的 4 个部分作为一个整体讨论；不同的预测边界框可能具有相同的损失，当 4 个部分的总体损失相同时，难以确定应该选择哪个预测框；并且模型在训练过程中更偏向于尺寸更大的物体。</p>
+<h4 id="IoU-loss"><a href="#IoU-loss" class="headerlink" title="IoU loss"></a>IoU loss</h4><p>IoU loss 通过计算预测边界框和真实边界框的交集与并集之比（IoU），直接反映了两个边界框之间的重叠程度。公式为 <img src="https://cdn.nlark.com/yuque/__latex/85be3af65349c62f64c8dec36d089753.svg" alt="image">，其中 <img src="https://cdn.nlark.com/yuque/__latex/d92c4b56954fb6ac3542d3966b545344.svg" alt="image"> 是预测框和真实框的交集面积，<img src="https://cdn.nlark.com/yuque/__latex/fc0680f87c80760039bb738bf60c7b67.svg" alt="image"> 是预测框和真实框的并集面积。</p>
+<p>然后将其作为损失函数时，通常使用 <img src="https://cdn.nlark.com/yuque/__latex/8d35e93383d2341293df7f287c43206f.svg" alt="image"> 来表示损失值，损失值越小，说明预测框和真实框的重叠程度越高。</p>
+<p>优势：具有尺度不变性，即对不同大小的边界框具有相同的评价标准，能够更准确地反映预测框和真实框的匹配程度。并且将 4 个点构成的边界框看成一个整体进行回归，解决了之前损失函数中变量相互独立的问题。</p>
+<p>不足：当预测边界框和真实边界框不相交时，IoU 为 0，此时无法提供有效的梯度信息来指导模型优化；并且当两个预测框的 IoU 值相同时，无法反映两个框是如何相交的。</p>
+<h4 id="GIoU-loss"><a href="#GIoU-loss" class="headerlink" title="GIoU loss"></a>GIoU loss</h4><p>原理：为了解决 IoU loss 在不相交边界框情况下无法提供梯度信息的问题，GIoU loss 被提出。它在 IoU 的基础上引入了预测边界框和真实边界框的最小外接矩形，通过计算两个边界框与最小外接矩形之间的面积比例来提供额外的梯度信息。公式中除了包含 IoU 的部分，还引入了一个与最小外接矩形相关的比例项。</p>
+<p>#这里打一个问号后面继续探索</p>
+<p>优势：在边界框不相交或包含关系不明确的情况下也能有效指导模型优化，相比 IoU loss 更加鲁棒，能够更好地反映真实框和预测框的重合程度和远近距离。</p>
+<p>不足：当预测框在真实框内部时，GIoU 可能会退化为 IoU，无法很好地衡量其相对的位置关系；并且在计算过程中，预测框在水平或垂直方向优化困难，导致收敛速度慢。</p>
+<h4 id="DIoU-loss"><a href="#DIoU-loss" class="headerlink" title="DIoU loss"></a>DIoU loss</h4><p>原理：DIoU loss 在 GIoU 的基础上增加了对中心点距离的惩罚项，其惩罚项是基于中心点的距离和对角线距离的比值。通过考虑预测框和真实框中心点之间的距离，使得模型在优化边界框位置时更加关注中心点的一致性。</p>
+<p>优势：避免了 GIoU 在两框距离较远时产生较大闭包时所造成的损失值较大而难以优化的情况，加速了收敛速度，并且在一定程度上解决了 GIoU 的一些局限性。</p>
+<p>不足：当预测框和目标框中心点重合，但宽高比不同时，DIoU loss 无法有效区分。</p>
+<h4 id="CIoU-loss"><a href="#CIoU-loss" class="headerlink" title="CIoU loss"></a>CIoU loss</h4><p>原理：在 DIoU 的基础上增加了对长宽比一致性的惩罚项，从而能够更全面地评估边界框之间的相似性。引入了一个衡量长宽比一致性的参数，将预测框与真实框之间长宽比的差异纳入到损失函数的计算中。</p>
+<p>优势：考虑了重叠面积、中心点距离以及长宽比三个重要的几何因素，能够更准确地评估边界框的回归效果，提高模型的检测精度。</p>
+<p>不足：公式中的参数可能需要根据具体的数据集进行调整，并且在一些复杂的场景下，仍然可能存在一定的局限性。</p>
+<h3 id="Technical-Evolution-of-Non-Maximum-Suppression"><a href="#Technical-Evolution-of-Non-Maximum-Suppression" class="headerlink" title="Technical Evolution of Non-Maximum Suppression"></a>Technical Evolution of Non-Maximum Suppression</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740319276016-18fb8ee5-e0c3-4f6b-9ec8-049a2f40a2d7.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740377679817-47364b00-bf30-4ad3-b1e0-c9c2dcc2dbaa.png"></p>
+<p>neighboring 相邻的    suppression 抑制   replicated复制的  </p>
+<p>NMS就是非极大值抑制</p>
+<p>非极大值抑制的目的-&gt;删除复制的边界框并获取最终检测结果</p>
+<h4 id="Greedy-selection"><a href="#Greedy-selection" class="headerlink" title="Greedy selection"></a>Greedy selection</h4><p> <img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740378863421-2a9a3755-7016-462b-8b84-e9021b15d361.png"></p>
+<p>贪婪选择</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">首先按照检测框的置信度得分排序-&gt;选择置信度最高的检测框作为参考框-&gt;计算其余检测框与这个参考框的交并比（IoU）(如果某个检测框与参考框的 IoU 超过设定阈值（如 0.5 - 0.7），就会被抑制（即从候选检测框集合中移除）)</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">然后从未被抑制的检测框中再选择置信度最高的作为新参考框，重复上述 IoU 计算和抑制过程，直到所有检测框都被处理。例如，在一个简单的目标检测场景中，有多个检测框检测到同一个目标，通过贪心 NMS，最终只会保留一个置信度最高且与其他被抑制框有较大重叠的检测框。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">缺点：两个目标距离很近或者部分重叠时，可能会因为 IoU 阈值设置问题而误抑制其中一个目标的检测框，导致目标丢失（漏检）</font></p>
+<p>threshold 阈值     de facto事实上</p>
+<h4 id="Bounding-Box-aggregation"><a href="#Bounding-Box-aggregation" class="headerlink" title="Bounding Box aggregation"></a>Bounding Box aggregation</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740378882551-b40233b4-2f85-4e06-ac03-4afed62d92ea.png"></p>
+<p>aggregation 聚合 cluster 聚类  spatial layout空间布局 </p>
+<p>边界框聚合</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">将多个相似的检测框进行聚合。它基于这样的认识：多个重叠的检测框可能都包含了目标的部分有效信息。通过一定的聚合规则，如加权平均等方式，将这些检测框的位置和置信度等信息进行整合</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">缺点：计算成本高，而且加权的这个设计比较困难</font></p>
+<h4 id="Learning-based-NMS"><a href="#Learning-based-NMS" class="headerlink" title="Learning based NMS"></a><font style="color:rgba(0, 0, 0, 0.85);">Learning based NMS</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740379370295-0046d7de-8b9b-4d15-8eb4-cd56c13508cd.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">NMS 看作一个可以学习的模块，通过在训练数据中学习检测框之间的关系以及合适的抑制策略</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">需要额外的训练数据来学习 NMS 模块，增加了训练的复杂性和成本。而且模型的解释性相对较差，很难直观地理解学习到的 NMS 策略是如何工作的。 而且有可能过拟合。</font></p>
+<h4 id="NMS-free-detector"><a href="#NMS-free-detector" class="headerlink" title="NMS-free detector"></a><font style="color:rgba(0, 0, 0, 0.85);">NMS-free detector</font></h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740380614748-5bb7d0a6-08f2-4a94-a59e-87b0d76ec5f5.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">改进目标检测模型的架构或者损失函数等方式，使得模型在训练过程中直接输出不包含冗余检测框的结果。例如，一些方法通过设计新的锚点（anchor）策略或者采用无锚点（anchor - free）的检测方法，在预测阶段就能够得到相对独立和准确的目标检测框，减少了后续需要使用 NMS 进行处理的可能性。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">目前这种方法还处于研究和发展阶段，新的模型架构和策略可能会带来新的问题。</font></p>
+<h1 id="Ⅲ-SPEED-UP-OF-DETECTION"><a href="#Ⅲ-SPEED-UP-OF-DETECTION" class="headerlink" title="Ⅲ SPEED-UP OF DETECTION"></a><font style="color:rgba(0, 0, 0, 0.85);">Ⅲ SPEED-UP OF DETECTION</font></h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740380812819-8f03c585-6e4e-4c46-8ce8-26be5a0b6ea7.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740380822644-383b3240-05b0-4132-a1db-db7d9b3b72a3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740381063023-39f29518-154e-4dca-b1a9-f8d3ed2f50a7.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);">检测流程” 加速   “检测器骨干网络” 加速  “数值计算” 加速</font></p>
+<h2 id="Detection-pipeline"><a href="#Detection-pipeline" class="headerlink" title="Detection pipeline"></a><font style="color:rgba(0, 0, 0, 0.85);">Detection pipeline</font></h2><p><strong>检测流程的优化</strong></p>
+<h3 id="A-Feature-Map-Shared-Computation"><a href="#A-Feature-Map-Shared-Computation" class="headerlink" title="A. Feature Map Shared Computation"></a>A. Feature Map Shared Computation</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382569177-13fd50dc-39a7-4e89-8894-eb4be106a5e7.png"></p>
+<p>redundancy 冗余</p>
+<p>特征图共享计算</p>
+<p>检测器中，特种提取决定计算量，最常用的减少特征计算冗余是只计算一次全图的feature map</p>
+<h3 id="B-Cascaded-Detection"><a href="#B-Cascaded-Detection" class="headerlink" title="B. Cascaded Detection"></a>B. Cascaded Detection</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382578156-db4d4521-1e87-4e27-ac5b-aeeaba6735f5.png"></p>
+<p>出现了很多次的 coarse to fine 由粗到细   detection philosophy 检测理念 </p>
+<p>级联检测 </p>
+<p>用简单的算法过滤大部分的简单背景窗口，然后用更复杂的算法处理剩下的算法</p>
+<p>特别适用于大场景下的小目标内容的检测</p>
+<h2 id="Detector-backbone"><a href="#Detector-backbone" class="headerlink" title="Detector backbone"></a>Detector backbone</h2><p><strong>检测主干网络</strong></p>
+<h3 id="C-Network-Pruning-and-Quantification"><a href="#C-Network-Pruning-and-Quantification" class="headerlink" title="C. Network Pruning and Quantification"></a>C. Network Pruning and Quantification</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382595043-ef827420-c58c-4292-ac22-986bbf32c49f.png"></p>
+<p>pruning 修剪  quantification 量化 binarization二值化 floating-point 浮点  logical 逻辑</p>
+<p>修剪-&gt;修剪网络结构或权重  -&gt;迭代训练和剪枝过程 -&gt;删除小部分不重要的权重在训练的每个步骤</p>
+<p>量化-&gt;减少代码长度 -&gt; 二值化 -&gt;浮点运算改成逻辑运算</p>
+<h3 id="D-Lightweight-Network-Design"><a href="#D-Lightweight-Network-Design" class="headerlink" title="D. Lightweight Network Design"></a>D. Lightweight Network Design</h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382634378-a4dd55b2-e605-456b-a4c5-daf825920530.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382782198-712d5cbe-f7e5-4703-a4fe-32e4b17ab58a.png"></p>
+<p>除了小卷积多层的其他方法</p>
+<h4 id="1-Factorizing-Convolutions"><a href="#1-Factorizing-Convolutions" class="headerlink" title="1) Factorizing Convolutions"></a>1) Factorizing Convolutions</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382658971-00fd9c23-db6a-43c4-81e9-73a1c29d1d1d.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382794016-c37be2dc-8fd6-4703-b3a5-fcbee2b423c2.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">分解卷积-&gt;最直接构建轻量化网络的方法-&gt; 1.把大卷积分为几个小卷积filter 2.在通道维度进行分解(原本一个在所有通道上进行卷积的大卷积核，可以被拆分成多个在部分通道上独立进行卷积的小卷积核。这些小卷积核分别作用于不同的通道子集，每个小卷积核只负责处理一部分通道的信息)</font></p>
+<h4 id="2-Group-Convolution"><a href="#2-Group-Convolution" class="headerlink" title="2) Group Convolution"></a>2) Group Convolution</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382805594-9109951b-3d2a-44e6-88af-416df9352984.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382815951-6c2fce9d-841d-4ad3-a4a1-1fde473ccea3.png"></p>
+<p>分组卷积将特征通道分组并独立卷积，使计算量理论上降为原来的(1&#x2F;m)，主要原因在于卷积计算量与参数数量的紧密联系，以及分组操作对这两者的改变。</p>
+<p>假设我们有一个输入特征图，其尺寸为(H×W×C)（高度(H &#x3D; 32)，宽度(W &#x3D; 32)，通道数(C &#x3D; 256)） ，使用的卷积核大小为(3×3) ，步长为1，填充为1，且不考虑偏置。在常规卷积的情况下：</p>
+<ul>
+<li>每个卷积核的参数数量为(3×3×256 &#x3D; 2304)个。</li>
+<li>对于输入特征图的每一个位置，卷积核都要进行一次卷积操作，总的卷积操作次数为(32×32)（特征图的像素数量）。那么总的乘法运算次数为(32×32×3×3×256) ，这个计算量是非常大的。</li>
+</ul>
+<p>现在我们采用分组卷积，将通道数(C &#x3D; 256)平均分成(m &#x3D; 8)组：</p>
+<ul>
+<li>每组的通道数变为(256÷8 &#x3D; 32) 。此时每个卷积核的参数数量变为(3×3×32 &#x3D; 288)个，相较于常规卷积，每个卷积核的计算量明显减少。</li>
+<li>对于每一组，卷积核在该组特征图上的卷积操作次数仍然是(32×32) 。但因为分成了8组，所以总的卷积操作次数从表面上看似乎是(32×32×8) ，和常规卷积时数量一样。然而，实际上计算量已经大幅下降。因为每个卷积核的参数数量变为了原来的(\frac{1}{8}) 。具体到乘法运算次数，现在总的乘法运算次数为(32×32×3×3×32×8) ，对比常规卷积的(32×32×3×3×256) ，刚好是原来1&#x2F;8。这就说明了分组卷积不仅减少了每个卷积核的计算量，总体计算量也相应减少，并非总体计算次数不变。</li>
+</ul>
+<h4 id="3-Depth-wise-Separable-Convolution"><a href="#3-Depth-wise-Separable-Convolution" class="headerlink" title="3) Depth-wise Separable Convolution"></a>3) Depth-wise Separable Convolution</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382830939-1a313f28-fa75-459c-9866-4f11e7a872ea.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382843066-a20b6b0c-ad25-4c49-85c9-20cdb3820993.png"></p>
+<p>1 × 1 卷积的利用</p>
+<h4 id="4-Bottle-neck-Design"><a href="#4-Bottle-neck-Design" class="headerlink" title="4) Bottle-neck Design"></a>4) Bottle-neck Design</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382861481-4cf13af2-9f20-427a-a6aa-11efd079eb21.png"></p>
+<p>瓶颈的设计</p>
+<p><strong>压缩输入层</strong>：可以对检测器的输入层进行压缩，从检测的初始阶段就降低计算量 </p>
+<p><strong>压缩特征图</strong>：还可以压缩特征图，使其 “变薄”，进而加快后续的检测过程</p>
+<h4 id="5-Detection-with-NAS"><a href="#5-Detection-with-NAS" class="headerlink" title="5) Detection with NAS"></a>5) Detection with NAS</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382872744-5f2df473-204f-4c5b-9055-458d7448130e.png"></p>
+<p>candidate 候选的  strategies 策略</p>
+<p>基于神经架构搜索（NAS）的检测</p>
+<p>NAS 能从大量候选网络空间中搜索出最优或接近最优的网络架构</p>
+<h2 id="Numerical-computation"><a href="#Numerical-computation" class="headerlink" title="Numerical computation"></a>Numerical computation</h2><h3 id="E-Numerical-Acceleration"><a href="#E-Numerical-Acceleration" class="headerlink" title="E. Numerical Acceleration"></a>E. Numerical Acceleration</h3><p>从检测器实现的底层来进行加速</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382899007-7b3a3d13-830f-4d66-a1cb-e0166f6c5d44.png"></p>
+<h4 id="1-Speed-Up-with-Integral-Image"><a href="#1-Speed-Up-with-Integral-Image" class="headerlink" title="1) Speed Up with Integral Image"></a>1) Speed Up with Integral Image</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382915210-f06efd90-b5d0-4e7e-aff4-04f2bf765116.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382929793-cdb73ec2-0de2-45b0-98a4-2b7d59f5fdc6.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382939633-f09ff40e-2835-4e50-9d93-145975cf6b07.png"></p>
+<p>summations 求和 </p>
+<p>积分图像的本质是信号处理中卷积的积分-微分可分性</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">只有少数非零项需要进行乘法和加法运算</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">积分图像</font></strong></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">疏信号指信号中大部分值为零或接近零的信号  据等式右边的形式，卷积运算可以得到加速 它进行卷积运算时，涉及到的非零值计算量相对较少，从而减少了总的计算量，达到了加速卷积的效果</font></p>
+<h4 id="2-Speed-Up-in-Frequency-Domain"><a href="#2-Speed-Up-in-Frequency-Domain" class="headerlink" title="2) Speed Up in Frequency Domain"></a>2) Speed Up in Frequency Domain</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382950264-91c5e67f-9a8b-4916-af0d-4a60255ca17a.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382960539-bd99627b-47a3-4efc-97c2-37e6a51ce457.png"></p>
+<p>Frequency Domain 频域</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">过将特征图和检测器权重先进行傅里叶变换转换到频域，然后在频域中进行逐点相乘，最后再通过逆傅里叶变换将结果转换回时域，就可以得到卷积的结果，从而实现了卷积运算的加速。这种方法在处理大尺寸的特征图和滤波器时，能够显著减少计算量，提高目标检测的速度，尤其在实时性要求较高的目标检测应用中。</font></p>
+<p><strong><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">频域加速</font></strong></p>
+<h4 id="3-Vector-Quantization"><a href="#3-Vector-Quantization" class="headerlink" title="3) Vector Quantization"></a>3) Vector Quantization</h4><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740382970523-354a82a2-e583-41f8-ad77-5d36dd38882d.png"></p>
+<p>向量量化</p>
+<p>通过一小部分原型向量来近似地分布一大组数据。可用于数据压缩和加速目标检测中的内积</p>
+<h1 id="Ⅳ-RECENT-ADVANCES-IN-OBJECT-DETECTION"><a href="#Ⅳ-RECENT-ADVANCES-IN-OBJECT-DETECTION" class="headerlink" title="Ⅳ RECENT ADVANCES IN OBJECT DETECTION"></a>Ⅳ RECENT ADVANCES IN OBJECT DETECTION</h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740474058450-1e6e6f87-fb17-426a-be82-61ab68880fc1.png"></p>
+<p>fundamental principles 基本原则   underlying logic 底层逻辑 </p>
+<p>In the above sections 在以上部分</p>
+<p>novel 新颖的  crossovers 跨界  concept 概念</p>
+<h2 id="A-Beyond-Sliding-Window-Detection"><a href="#A-Beyond-Sliding-Window-Detection" class="headerlink" title="A. Beyond Sliding Window Detection"></a>A. Beyond Sliding Window Detection</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740474405374-44b1c1ba-2c41-43b3-b8a0-8f480337119b.png"></p>
+<p>uniquely 唯一的   determined 确定   upper left corner 左上角  lower right corner 右下角 equivalently 等价的  pair-wise成对 semantic segmentation语义分割  liberates 释放</p>
+<p>物体可以通过其真实边界框左上和右下角唯一确定 -&gt; 目标检测任务等价转化为关键点定位问题 -&gt; 预测焦点的热图，确定图像中物体角点位置确定边界框   or 利用更多关键点，角点、中心点、极端点、中心点和代表性点等</p>
+<p>物体视为一个或多个点并直接预测属性（例如高度宽度等）-&gt;无需分组，无需设计多尺度锚框</p>
+<p>DETR结合预测-&gt;transformer端到端目标检测</p>
+<h2 id="B-Robust-Detection-of-Rotation-and-Scale-Changes"><a href="#B-Robust-Detection-of-Rotation-and-Scale-Changes" class="headerlink" title="B. Robust Detection of Rotation and Scale Changes"></a>B. Robust Detection of Rotation and Scale Changes</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740475469766-ee0f2b7b-ac90-492d-95b1-ae13f62ba32e.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740475483882-e5554746-e51c-4208-88b5-1eb5a604c528.png"></p>
+<h3 id="1-Rotation-Robust-Detectio"><a href="#1-Rotation-Robust-Detectio" class="headerlink" title="1) Rotation Robust Detectio"></a>1) Rotation Robust Detectio</h3><p>remote sensing 遥感  data augmentation 数据增强   geometric几何</p>
+<p>数据增强 每个方向训练一个检测器 旋转不变的损失函数  学习候选对象的几何变换(笛卡尔坐标-&gt;极坐标)</p>
+<h3 id="2-Scale-Robust-Detection"><a href="#2-Scale-Robust-Detection" class="headerlink" title="2) Scale Robust Detection"></a>2) Scale Robust Detection</h3><h4 id="Scale-adaptive-training"><a href="#Scale-adaptive-training" class="headerlink" title="Scale adaptive training"></a>Scale adaptive training</h4><p>pyramid 金字塔  alleviate缓解  fundamentally从根本上</p>
+<p>尺度自适应训练-&gt;将输入图像重新缩放为固定大小，然后对所有尺度的物体进行损失反向传播。</p>
+<p>缺陷-&gt; “尺度不平衡” 问题</p>
+<p>在检测过程中构建图像金字塔可以缓解该问题，但无法从根本上解决 -&gt; 金字塔尺度归一化（SNIP），只对选定尺度的物体进行损失反向传播-&gt;高效重采样的 SNIP（SNIPER）将图像裁剪并重新缩放为一组子区域，以便从大批量训练中获益</p>
+<h4 id="Scale-adaptive-detection"><a href="#Scale-adaptive-detection" class="headerlink" title="Scale adaptive detection"></a>Scale adaptive detection</h4><p>aspect ratio 横纵比</p>
+<p>锚框无法自适应意外的尺度变化-&gt;自适应放大技术-&gt;预测图像中物体的尺度分布，然后根据预测结果自适应地对图像进行重新缩放。通过提前预估物体的尺度信息，对图像进行针对性的缩放</p>
+<h2 id="C-Detection-with-Better-Backbones"><a href="#C-Detection-with-Better-Backbones" class="headerlink" title="C. Detection with Better Backbones"></a>C. Detection with Better Backbones</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740475500795-8b6cad12-5142-4fd7-aee6-7ebee1803436.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740475523617-e2733a08-57ae-4207-8365-018556051b0c.png"></p>
+<p>检测器的精度和速度在很大程度上取决于特征提取网络（骨干网络）</p>
+<p>ResNet 通过残差结构解决了深度神经网络训练中的梯度消失问题，能有效提取深层特征</p>
+<p>CSPNet 则在减少计算量的同时增强了学习能力</p>
+<p>Hourglass 网络适用于需要精确位置信息的任务</p>
+<p>Swin Transformer 将 Transformer 引入视觉领域</p>
+<h2 id="D-Improvements-of-Localization"><a href="#D-Improvements-of-Localization" class="headerlink" title="D. Improvements of Localization"></a>D. Improvements of Localization</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476254346-d4ead677-eba1-4e18-8995-ef40fae471a2.png"></p>
+<h3 id="1-Bounding-Box-Refinement"><a href="#1-Bounding-Box-Refinement" class="headerlink" title="1) Bounding Box Refinement"></a>1) Bounding Box Refinement</h3><p>intuitive 直观的  refinement优化 post-processing后处理 monotonicity 单调性 degenerate退化</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">迭代地将检测结果输入到边界框回归器，就像是不断地修正预测结果，使得边界框的位置和大小不断接近物体真实情况-&gt;但有的研究者认为这不能保证单调性，有可能会造成定位的退化</font></p>
+<h3 id="2-New-Loss-Functions-for-Accurate-Localization"><a href="#2-New-Loss-Functions-for-Accurate-Localization" class="headerlink" title="2) New Loss Functions for Accurate Localization"></a>2) New Loss Functions for Accurate Localization</h3><p>coordinate 坐标  probabilistic概率</p>
+<p><font style="color:rgb(28, 31, 35);">现代目标检测器多将物体定位视为坐标回归问题，但该模式有明显缺陷。一是回归损失与定位最终评估不对应，对长宽比大的物体尤为明显；二是传统边界框回归方法无法提供定位置信度，易导致非极大值抑制失败。新损失函数可缓解这些问题，如直接用交并比（IoU）作定位损失，还有研究在概率推理框架下改进定位，预测边界框位置的概率分布，而非直接预测坐标。 </font></p>
+<h2 id="E-Learning-with-Segmentation-Loss"><a href="#E-Learning-with-Segmentation-Loss" class="headerlink" title="E. Learning with Segmentation Loss"></a>E. Learning with Segmentation Loss</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476242306-1efa701a-80fa-4157-aa55-eb053e55c115.png"></p>
+<p>auxiliary辅助的</p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">通过语义分割来提升目标检测的效果，最简单的方法是将语义分割网络视作一个固定的特征提取器，并将其作为辅助特征集成到目标检测器中-&gt;但是语义分割网络可能会带来额外的计算负担。语义分割网络本身结构复杂，计算量较大。将其集成到目标检测系统中，意味着在运行目标检测任务时，除了原本目标检测网络所需的计算资源外，还需要额外的资源来运行语义分割网络进行特征提取。这会导致整个系统的计算时间变长，对硬件设备的要求提高，在一些对计算资源有限制的场景下（如移动设备或实时性要求极高的应用场景），可能不太适用</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">另一个方法-&gt;在原始目标检测器的基础上引入一个额外的语义分割分支，并使用多任务损失函数（分割损失 + 检测损失）来训练这个模型 -&gt;训练时借助分割分支提升检测精度，推理时又不影响速度，能够满足实时性要求-&gt;但是意味着在准备训练数据时，不仅要标注出图像中目标物体的边界框（用于目标检测训练），还要对每个像素进行类别标注。</font></p>
+<h2 id="F-Adversarial-Training"><a href="#F-Adversarial-Training" class="headerlink" title="F. Adversarial Training"></a>F. Adversarial Training</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476205586-8d6b0dfe-d701-4d3e-98f1-964607fdbf79.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476222905-ff8a3322-c708-42df-aa4c-c9fbabd79957.png"></p>
+<p>GAN对抗性训练进入目标检测领域来进行小型目标和遮挡目标检测</p>
+<p>通过使用对抗性训练来生成遮挡掩码。对抗网络不是在像素空间中生成示例，而是直接修改特征以模拟遮挡。</p>
+<h2 id="G-Weakly-Supervised-Object-Detection"><a href="#G-Weakly-Supervised-Object-Detection" class="headerlink" title="G. Weakly Supervised Object Detection"></a>G. Weakly Supervised Object Detection</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476180270-737b4125-9e9e-4c0f-a8c2-26388d1b0370.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476191321-44ed435b-a009-425c-9e7d-c4b493dfa9c8.png"></p>
+<p>manually 手工 annotation 注释</p>
+<p>弱监督目标检测<font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">利用图像级标注而非边界框标注来训练目标检测器，从而减少对数据标注的依赖</font></p>
+<p>多实例学习：把图像中的目标候选区域当作“包”，以图像级标注为标签，将WSOD转化为多实例学习过程，从“包”中学习目标特征。</p>
+<p>类激活映射：利用CNN卷积层可充当目标检测器的特性，使仅在图像级标签训练下的CNN具备定位能力。</p>
+<p>其他方法：将WSOD视为提案排序，选择关键区域训练；或掩码图像部分来判断物体位置；还有利用生成对抗训练实现WSOD。</p>
+<p>这段我就不太清楚了，以后读论文继续深入了解</p>
+<h2 id="H-Detection-with-Domain-Adaptation"><a href="#H-Detection-with-Domain-Adaptation" class="headerlink" title="H. Detection with Domain Adaptation"></a>H. Detection with Domain Adaptation</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740476168001-202176af-2e27-41ef-8157-eaac3cf8ee08.png"></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">实际应用场景中，数据往往并不满足独立同分布的条件。例如在自动驾驶中，不同天气、光照条件下采集的数据差异很大；在视频监控里，不同摄像头拍摄的画面也存在差异。用这样非独立同分布的数据进行目标检测，对模型的性能影响很大</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">为了获得域不变的特征表示，研究人员从图像、类别或物体等不同层面，探索了基于特征正则化和对抗训练的方法。特征正则化通过对特征进行约束和调整，让模型学习到更通用、不受数据域差异影响的特征。</font></p>
+<p><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">循环一致变换（cycle-consistent transformation） 也被应用于连接源域和目标域。这种方法通过构建循环一致性的约束，使得在源域和目标域之间的转换更加合理和有效，进一步缩小了两个域之间的差距。</font></p>
+<h1 id="Ⅴ-CONCLUSION-AND-FUTURE-DIRECTIONS"><a href="#Ⅴ-CONCLUSION-AND-FUTURE-DIRECTIONS" class="headerlink" title="Ⅴ CONCLUSION AND FUTURE DIRECTIONS"></a><font style="color:rgba(0, 0, 0, 0.85);background-color:rgb(249, 250, 251);">Ⅴ CONCLUSION AND FUTURE DIRECTIONS</font></h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740485275390-a126a7fd-a452-4b2c-bf7e-045d15236184.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740485288706-1306ee74-3c0c-4887-a50b-be60897f647d.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740485302215-e3c5fcc7-e919-45da-a88c-347990701c39.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/36025084/1740485316161-73c025e6-d4e7-4259-85b6-46193b85596e.png"></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">轻量化目标检测</font></strong><font style="background-color:rgb(249, 250, 251);">：旨在加快检测推理速度，使其能在低功耗边缘设备上运行，满足移动增强现实、自动驾驶、智慧城市等应用需求。尽管近年来有所进展，但在检测小物体或融合多源信息时，与人类视觉仍存在差距。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">端到端目标检测</font></strong><font style="background-color:rgb(249, 250, 251);">：目前多数方法在训练时采用一对多标签分配和单独设计非极大值抑制操作，未来研究方向是设计能兼顾高精度和高效率的端到端流程。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">小物体检测</font></strong><font style="background-color:rgb(249, 250, 251);">：在大场景中检测小物体颇具挑战，未来可通过集成视觉注意力机制和设计高分辨率轻量化网络来解决，该研究在人群或动物数量统计、军事目标检测等方面有应用潜力。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">3D 目标检测</font></strong><font style="background-color:rgb(249, 250, 251);">：2D 目标检测虽已取得进展，但自动驾驶等应用需要获取物体在 3D 世界的位置和姿态信息，因此未来 3D 目标检测将受到更多关注，且会更多利用多源和多视图数据。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">视频中的检测</font></strong><font style="background-color:rgb(249, 250, 251);">：高清视频中的实时目标检测与跟踪对视频监控和自动驾驶意义重大。传统检测器多针对图像检测，未来需在计算限制下探索时空相关性以提升检测性能。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">跨模态检测</font></strong><font style="background-color:rgb(249, 250, 251);">：使用多源 &#x2F; 模态数据（如 RGB-D 图像、激光雷达、流数据、声音、文本、视频等）进行目标检测，有助于构建更精准的检测系统，类似人类感知。未来需解决训练好的检测器跨模态迁移、信息融合等问题。</font></p>
+<p><strong><font style="background-color:rgb(249, 250, 251);">迈向开放世界检测</font></strong><font style="background-color:rgb(249, 250, 251);">：当前多数算法难以检测未知类别的物体，而开放世界检测旨在在监督信号不完全或未明确给出时发现未知类别物体，在机器人和自动驾驶等领域有广阔应用前景。</font></p>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">之前的笔记在线下，以后的笔记都会发到线上内容</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ABSTRACT"><span class="toc-number">1.</span> <span class="toc-text">ABSTRACT</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%85%A0-INTRODUCTION"><span class="toc-number">2.</span> <span class="toc-text">Ⅰ INTRODUCTION</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%85%A1-OBJECT-DETECTION-IN-20-YEARS"><span class="toc-number">3.</span> <span class="toc-text">Ⅱ OBJECT DETECTION IN 20 YEARS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-A-Road-Map-of-Object-Detection"><span class="toc-number">3.1.</span> <span class="toc-text">A. A Road Map of Object Detection</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Traditional-Detectors"><span class="toc-number">3.1.1.</span> <span class="toc-text">Traditional Detectors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Viola-Jones-Detectors"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">Viola Jones Detectors</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HOG-Detector"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">HOG Detector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Deformable-Part-based-Model-DPM"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">Deformable Part-based Model (DPM)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CNN-based-Two-stage-Detectors"><span class="toc-number">3.1.2.</span> <span class="toc-text">CNN based Two-stage Detectors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RCNN"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">RCNN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SPPNet"><span class="toc-number">3.1.2.2.</span> <span class="toc-text">SPPNet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fast-RCNN"><span class="toc-number">3.1.2.3.</span> <span class="toc-text">Fast RCNN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Faster-RCNN"><span class="toc-number">3.1.2.4.</span> <span class="toc-text">Faster RCNN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Feature-Pyramid-Networks-FPN"><span class="toc-number">3.1.2.5.</span> <span class="toc-text">Feature Pyramid Networks (FPN)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Milestones-CNN-based-One-stage-Detectors"><span class="toc-number">3.1.3.</span> <span class="toc-text">Milestones: CNN based One-stage Detectors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#You-Only-Look-Once-YOLO"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">You Only Look Once (YOLO)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Single-Shot-MultiBox-Detector-SSD"><span class="toc-number">3.1.3.2.</span> <span class="toc-text">Single Shot MultiBox Detector (SSD)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RetinaNet"><span class="toc-number">3.1.3.3.</span> <span class="toc-text">RetinaNet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CornerNet"><span class="toc-number">3.1.3.4.</span> <span class="toc-text">CornerNet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CenterNet"><span class="toc-number">3.1.3.5.</span> <span class="toc-text">CenterNet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DETR"><span class="toc-number">3.1.3.6.</span> <span class="toc-text">DETR</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Object-Detection-Datasets-and-Metrics"><span class="toc-number">3.2.</span> <span class="toc-text">B. Object Detection Datasets and Metrics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Datasets"><span class="toc-number">3.2.1.</span> <span class="toc-text">Datasets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How-can-we-evaluate-the-accuracy-of-a-detector-%EF%BC%88%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">How can we evaluate the accuracy of a detector?（评价指标）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IoU%EF%BC%88Intersection-over-union%EF%BC%89"><span class="toc-number">3.2.2.1.</span> <span class="toc-text">IoU（Intersection over union）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Precision-%E7%B2%BE%E7%A1%AE%E7%8E%87-and-Recall-%E5%8F%AC%E5%9B%9E%E7%8E%87"><span class="toc-number">3.2.2.2.</span> <span class="toc-text">Precision(精确率) and Recall(召回率)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-Technical-Evolution-in-Object-Detection"><span class="toc-number">3.3.</span> <span class="toc-text">C. Technical Evolution in Object Detection</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Evolution-of-Multi-Scale-Detection"><span class="toc-number">3.3.1.</span> <span class="toc-text">Technical Evolution of Multi-Scale Detection</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Feature-pyramids-sliding-windows-%E7%89%B9%E5%BE%81%E9%87%91%E5%AD%97%E5%A1%94-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">Feature pyramids + sliding windows(特征金字塔+滑动窗口)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Detection-with-object-proposals-%E5%9F%BA%E4%BA%8E%E7%9B%AE%E6%A0%87%E6%8F%90%E8%AE%AE%E7%9A%84%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">Detection with object proposals(基于目标提议的检测)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Deep-regression-and-anchor-free-detection-%E6%B7%B1%E5%BA%A6%E5%9B%9E%E5%BD%92%E5%92%8C%E6%97%A0%E9%94%9A%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">Deep regression and anchor-free detection(深度回归和无锚检测)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Multi-reference-resolution-detection-%E5%A4%9A%E5%8F%82%E8%80%83-%E5%A4%9A%E5%88%86%E8%BE%A8%E7%8E%87%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.1.4.</span> <span class="toc-text">Multi-reference&#x2F;-resolution detection(多参考 &#x2F; 多分辨率检测)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Evolution-of-Context-Priming"><span class="toc-number">3.3.2.</span> <span class="toc-text">Technical Evolution of Context Priming</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Detection-with-local-context"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">Detection with local context</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Detection-with-global-context"><span class="toc-number">3.3.2.2.</span> <span class="toc-text">Detection with global context</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Context-interactive"><span class="toc-number">3.3.2.3.</span> <span class="toc-text">Context interactive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.2.4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B3%E6%B3%A8%E5%B1%82%E9%9D%A2%EF%BC%9A"><span class="toc-number">3.3.2.4.1.</span> <span class="toc-text">关注层面：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A"><span class="toc-number">3.3.2.4.2.</span> <span class="toc-text">实现：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Evolution-of-Hard-Negative-Mining"><span class="toc-number">3.3.3.</span> <span class="toc-text">Technical Evolution of Hard Negative Mining</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bootstrap"><span class="toc-number">3.3.3.1.</span> <span class="toc-text">Bootstrap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Focal-Loss"><span class="toc-number">3.3.3.2.</span> <span class="toc-text">Focal Loss</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Evolution-of-Loss-Function"><span class="toc-number">3.3.4.</span> <span class="toc-text">Technical Evolution of Loss Function</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#L1-loss-%E5%92%8C-L2-loss"><span class="toc-number">3.3.4.1.</span> <span class="toc-text">L1 loss 和 L2 loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Smooth-L1-loss"><span class="toc-number">3.3.4.2.</span> <span class="toc-text">Smooth L1 loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IoU-loss"><span class="toc-number">3.3.4.3.</span> <span class="toc-text">IoU loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GIoU-loss"><span class="toc-number">3.3.4.4.</span> <span class="toc-text">GIoU loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DIoU-loss"><span class="toc-number">3.3.4.5.</span> <span class="toc-text">DIoU loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CIoU-loss"><span class="toc-number">3.3.4.6.</span> <span class="toc-text">CIoU loss</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Evolution-of-Non-Maximum-Suppression"><span class="toc-number">3.3.5.</span> <span class="toc-text">Technical Evolution of Non-Maximum Suppression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Greedy-selection"><span class="toc-number">3.3.5.1.</span> <span class="toc-text">Greedy selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bounding-Box-aggregation"><span class="toc-number">3.3.5.2.</span> <span class="toc-text">Bounding Box aggregation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Learning-based-NMS"><span class="toc-number">3.3.5.3.</span> <span class="toc-text">Learning based NMS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NMS-free-detector"><span class="toc-number">3.3.5.4.</span> <span class="toc-text">NMS-free detector</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%85%A2-SPEED-UP-OF-DETECTION"><span class="toc-number">4.</span> <span class="toc-text">Ⅲ SPEED-UP OF DETECTION</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Detection-pipeline"><span class="toc-number">4.1.</span> <span class="toc-text">Detection pipeline</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Feature-Map-Shared-Computation"><span class="toc-number">4.1.1.</span> <span class="toc-text">A. Feature Map Shared Computation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-Cascaded-Detection"><span class="toc-number">4.1.2.</span> <span class="toc-text">B. Cascaded Detection</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Detector-backbone"><span class="toc-number">4.2.</span> <span class="toc-text">Detector backbone</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C-Network-Pruning-and-Quantification"><span class="toc-number">4.2.1.</span> <span class="toc-text">C. Network Pruning and Quantification</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#D-Lightweight-Network-Design"><span class="toc-number">4.2.2.</span> <span class="toc-text">D. Lightweight Network Design</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Factorizing-Convolutions"><span class="toc-number">4.2.2.1.</span> <span class="toc-text">1) Factorizing Convolutions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Group-Convolution"><span class="toc-number">4.2.2.2.</span> <span class="toc-text">2) Group Convolution</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Depth-wise-Separable-Convolution"><span class="toc-number">4.2.2.3.</span> <span class="toc-text">3) Depth-wise Separable Convolution</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-Bottle-neck-Design"><span class="toc-number">4.2.2.4.</span> <span class="toc-text">4) Bottle-neck Design</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-Detection-with-NAS"><span class="toc-number">4.2.2.5.</span> <span class="toc-text">5) Detection with NAS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Numerical-computation"><span class="toc-number">4.3.</span> <span class="toc-text">Numerical computation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#E-Numerical-Acceleration"><span class="toc-number">4.3.1.</span> <span class="toc-text">E. Numerical Acceleration</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Speed-Up-with-Integral-Image"><span class="toc-number">4.3.1.1.</span> <span class="toc-text">1) Speed Up with Integral Image</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Speed-Up-in-Frequency-Domain"><span class="toc-number">4.3.1.2.</span> <span class="toc-text">2) Speed Up in Frequency Domain</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Vector-Quantization"><span class="toc-number">4.3.1.3.</span> <span class="toc-text">3) Vector Quantization</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%85%A3-RECENT-ADVANCES-IN-OBJECT-DETECTION"><span class="toc-number">5.</span> <span class="toc-text">Ⅳ RECENT ADVANCES IN OBJECT DETECTION</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-Beyond-Sliding-Window-Detection"><span class="toc-number">5.1.</span> <span class="toc-text">A. Beyond Sliding Window Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-Robust-Detection-of-Rotation-and-Scale-Changes"><span class="toc-number">5.2.</span> <span class="toc-text">B. Robust Detection of Rotation and Scale Changes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Rotation-Robust-Detectio"><span class="toc-number">5.2.1.</span> <span class="toc-text">1) Rotation Robust Detectio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Scale-Robust-Detection"><span class="toc-number">5.2.2.</span> <span class="toc-text">2) Scale Robust Detection</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Scale-adaptive-training"><span class="toc-number">5.2.2.1.</span> <span class="toc-text">Scale adaptive training</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Scale-adaptive-detection"><span class="toc-number">5.2.2.2.</span> <span class="toc-text">Scale adaptive detection</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-Detection-with-Better-Backbones"><span class="toc-number">5.3.</span> <span class="toc-text">C. Detection with Better Backbones</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#D-Improvements-of-Localization"><span class="toc-number">5.4.</span> <span class="toc-text">D. Improvements of Localization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Bounding-Box-Refinement"><span class="toc-number">5.4.1.</span> <span class="toc-text">1) Bounding Box Refinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-New-Loss-Functions-for-Accurate-Localization"><span class="toc-number">5.4.2.</span> <span class="toc-text">2) New Loss Functions for Accurate Localization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#E-Learning-with-Segmentation-Loss"><span class="toc-number">5.5.</span> <span class="toc-text">E. Learning with Segmentation Loss</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#F-Adversarial-Training"><span class="toc-number">5.6.</span> <span class="toc-text">F. Adversarial Training</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#G-Weakly-Supervised-Object-Detection"><span class="toc-number">5.7.</span> <span class="toc-text">G. Weakly Supervised Object Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#H-Detection-with-Domain-Adaptation"><span class="toc-number">5.8.</span> <span class="toc-text">H. Detection with Domain Adaptation</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%85%A4-CONCLUSION-AND-FUTURE-DIRECTIONS"><span class="toc-number">6.</span> <span class="toc-text">Ⅴ CONCLUSION AND FUTURE DIRECTIONS</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years/" title="无标题">无标题</a><time datetime="2025-02-25T12:12:20.461Z" title="发表于 2025-02-25 20:12:20">2025-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/22/hello-world/" title="Hello World">Hello World</a><time datetime="2025-02-22T05:41:25.669Z" title="发表于 2025-02-22 13:41:25">2025-02-22</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
