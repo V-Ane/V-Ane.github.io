@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/touxiang1.jpg">
 <meta property="article:published_time" content="2025-03-04T07:41:37.036Z">
-<meta property="article:modified_time" content="2025-03-06T12:55:12.698Z">
+<meta property="article:modified_time" content="2025-03-17T12:49:44.798Z">
 <meta property="article:author" content="Vane">
 <meta property="article:tag" content="目标检测">
 <meta property="article:tag" content="深度学习">
@@ -21,7 +21,7 @@
   "url": "http://example.com/2025/03/04/yolov1%20-%20%E8%AE%BA%E6%96%87/",
   "image": "http://example.com/img/touxiang1.jpg",
   "datePublished": "2025-03-04T07:41:37.036Z",
-  "dateModified": "2025-03-06T12:55:12.698Z",
+  "dateModified": "2025-03-17T12:49:44.798Z",
   "author": [
     {
       "@type": "Person",
@@ -162,7 +162,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">YOLO V1 论文精读</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">YOLO V1 论文精读</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-04T07:41:37.036Z" title="发表于 2025-03-04 15:41:37">2025-03-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-06T12:55:12.698Z" title="更新于 2025-03-06 20:55:12">2025-03-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/">论文精读</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><p>首先补充一些常识</p>
+}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">YOLO V1 论文精读</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">YOLO V1 论文精读</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-04T07:41:37.036Z" title="发表于 2025-03-04 15:41:37">2025-03-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-17T12:49:44.798Z" title="更新于 2025-03-17 20:49:44">2025-03-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/">论文精读</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><p>首先补充一些常识</p>
 <p>VOC数据集具有20个类别    MS COCO数据集具有80个类别</p>
 <p>RCN对于背景信息具有更高的误判，区分背景和物体的能力差</p>
 <p>YOLO对于背景信息和物体信息具有更好的理解，但是物体定位精读差</p>
@@ -319,7 +319,7 @@
 <p>YOLO的缺点-&gt;准确率低，对于小目标定位差</p>
 <p><img src="/../blogimg/image-20250304192525331.png" alt="image-20250304192525331"></p>
 <p>①缩放图片 ②卷积神经网络 ③后处理</p>
-<h2 id="2-Unified-Detection"><a href="#2-Unified-Detection" class="headerlink" title="2. Unified Detection"></a>2. Unified Detection</h2><table>
+<h1 id="2-Unified-Detection"><a href="#2-Unified-Detection" class="headerlink" title="2. Unified Detection"></a>2. Unified Detection</h1><table>
 <thead>
 <tr>
 <th>单词</th>
@@ -515,4 +515,142 @@
 <p>dropout概率为0.5</p>
 <p>随机缩放和平移，最高可达原始图像大小的 20%，在 HSV 色彩空间中随机调整图像的曝光和饱和度，最高可达 1.5 倍。</p>
 <p>HSV 色调 饱和度 明度</p>
-</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">论文精读的内容并没有打上翻译，更多的是我对这一段的总结概括和理解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Introduction"><span class="toc-number">2.</span> <span class="toc-text">1. Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Unified-Detection"><span class="toc-number">2.1.</span> <span class="toc-text">2. Unified Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Network-Design"><span class="toc-number">2.2.</span> <span class="toc-text">2.1. Network Design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Training"><span class="toc-number">2.3.</span> <span class="toc-text">2.2. Training</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/04/yolov1%20-%20%E8%AE%BA%E6%96%87/" title="YOLO V1 论文精读">YOLO V1 论文精读</a><time datetime="2025-03-04T07:41:37.036Z" title="发表于 2025-03-04 15:41:37">2025-03-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/03/yolov1%20-%20%E6%8A%80%E6%9C%AF/" title="YOLO V1 技术剖析">YOLO V1 技术剖析</a><time datetime="2025-03-03T07:02:01.353Z" title="发表于 2025-03-03 15:02:01">2025-03-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/26/ago%E6%8A%80%E6%9C%AF/" title="前者技术的补充">前者技术的补充</a><time datetime="2025-02-26T05:13:38.888Z" title="发表于 2025-02-26 13:13:38">2025-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/1/" title="无标题">无标题</a><time datetime="2025-02-25T12:57:57.127Z" title="发表于 2025-02-25 20:57:57">2025-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years1/" title="精读 Survey-Object Detection in 20 Years">精读 Survey-Object Detection in 20 Years</a><time datetime="2025-02-25T12:24:13.833Z" title="发表于 2025-02-25 20:24:13">2025-02-25</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<h2 id="2-3-Inference"><a href="#2-3-Inference" class="headerlink" title="2.3. Inference"></a>2.3. Inference</h2><table>
+<thead>
+<tr>
+<th>单词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>classifier-based method</td>
+<td>基于分类器的方法</td>
+</tr>
+<tr>
+<td>diversity</td>
+<td>多样性</td>
+</tr>
+<tr>
+<td>critical to</td>
+<td>对…至关重要</td>
+</tr>
+</tbody></table>
+<p>与训练过程类似，测试图像的检测预测只需进行一次网络评估。在 PASCAL VOC 数据集上，网络每张图像可预测 98 个边界框以及每个边界框的类别概率。由于只需一次网络评估，相比基于分类器的方法，YOLO 在测试时速度极快</p>
+<p>网格设计在边界框预测中引入了空间多样性。通常，物体所属的网格单元很明确，网络对每个物体仅预测一个边界框。然而，一些大型物体或位于多个网格单元边界附近的物体，可能会被多个网格单元检测到。此时，非极大值抑制可用于处理这些重复检测的问题。虽然它对 YOLO 性能的重要性不如对 R-CNN 或 DPM 那么关键，但能使 mAP 提升</p>
+<h2 id="2-4-Limitations-of-YOLO"><a href="#2-4-Limitations-of-YOLO" class="headerlink" title="2.4. Limitations of YOLO"></a>2.4. Limitations of YOLO</h2><table>
+<thead>
+<tr>
+<th>单词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>coarse</td>
+<td>粗糙的</td>
+</tr>
+<tr>
+<td>downsampling</td>
+<td>下采样</td>
+</tr>
+<tr>
+<td>approximate</td>
+<td>近似，使接近</td>
+</tr>
+<tr>
+<td>versus</td>
+<td>与…相比</td>
+</tr>
+</tbody></table>
+<p><strong>空间约束限制检测数量</strong>：YOLO对边界框的预测存在较强的空间约束，每个网格单元仅能预测两个边界框且只能有一个类别。这种限制使得模型在预测相邻物体时数量受限，难以检测成群出现的小物体，例如一群鸟。 </p>
+<p> <strong>难以适应新的物体形态</strong>：由于模型是从数据中学习预测边界框，对于新的或不常见长宽比及配置的物体，难以进行有效的泛化检测。 </p>
+<p> <strong>特征粗糙影响定位精度</strong>：YOLO的架构包含多个对输入图像的下采样层，导致用于预测边界框的特征相对粗糙。</p>
+<p>损失函数对大小边界框的误差处理方式相同，然而小边界框中的小误差对交并比（IOU）影响更大，因此模型的主要误差来源是定位不准确。 </p>
+<h1 id="3-Comparison-to-Other-Detection-Systems"><a href="#3-Comparison-to-Other-Detection-Systems" class="headerlink" title="3. Comparison to Other Detection Systems"></a>3. Comparison to Other Detection Systems</h1><table>
+<thead>
+<tr>
+<th>单词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>subset</td>
+<td>子集</td>
+</tr>
+<tr>
+<td>deformable</td>
+<td>可变的，可弯曲的</td>
+</tr>
+<tr>
+<td>contextual</td>
+<td>上下文的</td>
+</tr>
+<tr>
+<td>variant</td>
+<td>变种，变体</td>
+</tr>
+<tr>
+<td>jointly</td>
+<td>共同的，联合的</td>
+</tr>
+<tr>
+<td>cascade</td>
+<td>串联</td>
+</tr>
+<tr>
+<td>disjoint</td>
+<td>分离的</td>
+</tr>
+</tbody></table>
+<p>第3节主要将YOLO检测系统与其他检测框架进行对比</p>
+<p> <strong>与可变形部件模型（DPM）对比</strong>：DPM采用滑动窗口方式，通过独立的流程来提取静态特征、分类区域和预测边界框。而YOLO使用单个卷积神经网络替代这些分散的部分，网络能同时进行特征提取、边界框预测、非极大值抑制和上下文推理，并且训练并优化特征以适应检测任务，相比DPM，速度更快、准确性更高。—》特征提取的内容对比</p>
+<p><strong>与R-CNN对比</strong>：R-CNN及其变体通过区域提议寻找图像中的物体，其复杂的管道包含多个独立调整的阶段，导致速度较慢。YOLO与R-CNN有相似之处，如每个网格单元都会提议潜在的边界框并使用卷积特征进行评分。但YOLO对网格单元提议施加了空间约束，减少了对同一物体的重复检测，提议的边界框数量也更少，且将各个组件整合为一个联合优化的模型。 –》生成特别多候选框的对比</p>
+<p><strong>与其他快速检测器对比</strong>：Fast和Faster R-CNN致力于加速R-CNN框架，虽在速度和准确性上有提升，但仍未达到实时性能。许多针对DPM管道加速的研究中，仅30Hz DPM能真正实现实时检测。YOLO则完全摒弃传统检测管道，从设计上实现了快速检测。 </p>
+<p><strong>与特定类别的检测器对比</strong>：像针对人脸或人的单类检测器，因处理的变化较少可进行高度优化。而YOLO是通用检测器，能同时学习检测多种物体。</p>
+<p><strong>与Deep MultiBox对比</strong>：Deep MultiBox训练卷积神经网络来预测感兴趣区域，只能执行单目标检测，且是大型检测管道的一部分，需要进一步对图像补丁进行分类。YOLO则是完整的检测系统。 </p>
+<p><strong>与OverFeat对比</strong>：OverFeat通过训练卷积神经网络进行定位并应用于检测，它是一个独立的系统，优化目标是定位而非检测性能，在预测时只能看到局部信息，需要大量后处理来生成连贯的检测结果。而YOLO能全局推理，无需复杂后处理。 </p>
+<p><strong>与MultiGrasp对比</strong>：YOLO的网格预测边界框方法受MultiGrasp系统启发，但MultiGrasp仅需预测单个可抓取区域，而YOLO要预测多物体多类别的边界框和类别概率，任务更复杂。 </p>
+<h1 id="4-Experiments"><a href="#4-Experiments" class="headerlink" title="4. Experiments"></a>4. Experiments</h1><h2 id="4-1-Comparison-to-Other-Real-Time-Systems"><a href="#4-1-Comparison-to-Other-Real-Time-Systems" class="headerlink" title="4.1. Comparison to Other Real-Time Systems"></a>4.1. Comparison to Other Real-Time Systems</h2><p>许多目标检测研究致力于加速标准检测流程，但多数未达实时标准</p>
+<p>Fast YOLO 是 PASCAL 数据集上已知最快的目标检测方法，mAP 达 52.7%，准确率是此前实时检测方法的两倍多。YOLO 在保持实时性能的同时，将 mAP 提升至 63.4%。</p>
+<p>作者训练了基于 VGG - 16 的 YOLO 模型，其精度更高，但速度明显慢于普通 YOLO，不满足实时检测要求，主要用于与其他依赖 VGG - 16 的检测系统作对比。</p>
+<p>Fastest DPM 在提升 DPM 速度的同时，未过多牺牲 mAP，但仍未达到实时性能，且与基于神经网络的方法相比，DPM 检测精度较低。</p>
+<p>R - CNN minus R 用静态边界框提议替代 Selective Search，虽比 R - CNN 快，但仍未实现实时检测，且因提议质量不佳，精度大幅下降。</p>
+<p>Fast R - CNN 加快了 R - CNN 的分类阶段，但仍依赖 Selective Search 生成边界框提议，每张图像生成提议耗时约 2 秒，导致其 mAP 虽高，但帧率仅 0.5fps，远未达到实时标准。</p>
+<p>Faster R - CNN 用神经网络替代 Selective Search 来提议边界框，最精确的模型帧率为 7fps，较小且精度稍低的模型帧率为 18fps。VGG - 16 版本的 Faster R - CNN 比 YOLO 的 mAP 高 10，但速度慢 6 倍；ZeilerFergus 版本的 Faster R - CNN 比 YOLO 慢 2.5 倍，且精度更低。</p>
+<h2 id="4-2-VOC-2007-Error-Analysis"><a href="#4-2-VOC-2007-Error-Analysis" class="headerlink" title="4.2. VOC 2007 Error Analysis"></a>4.2. VOC 2007 Error Analysis</h2><table>
+<thead>
+<tr>
+<th>单词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>breakdown</td>
+<td>细分；详细分类</td>
+</tr>
+<tr>
+<td>methodology</td>
+<td>方法体系；方法论；一套方法</td>
+</tr>
+</tbody></table>
+<p>YOLO 定位误差约为 Fast R-CNN 两倍，但其背景误报少，误分类也相对较少</p>
+<p>Fast R-CNN 定位精准，但是背景误报问题突出。</p>
+<h2 id="4-3-Combining-Fast-R-CNN-and-YOLO"><a href="#4-3-Combining-Fast-R-CNN-and-YOLO" class="headerlink" title="4.3. Combining Fast R-CNN and YOLO"></a>4.3. Combining Fast R-CNN and YOLO</h2><p>主要在 PASCAL VOC 2012 数据集上评估 YOLO 性能。与其他先进方法相比，普通 YOLO 的平均精度均值（mAP）为 63.3%，虽未达顶尖水平，但在保持实时性能的同时，有一定竞争力。基于 VGG-16 的 YOLO 模型精度更高，达 66.4%，但速度较慢。</p>
+<p>YOLO 在复杂场景下检测的局限性主要是在一些类别上的检测困难。例如在检测小物体类别（如瓶子）时，YOLO 的性能不如其他一些方法。这反映出 YOLO 对于小物体检测可能存在精度不高的问题，在复杂场景下小物体容易被遗漏或者检测不准确</p>
+<h2 id="4-4-VOC-2012-Results"><a href="#4-4-VOC-2012-Results" class="headerlink" title="4.4. VOC 2012 Results"></a>4.4. VOC 2012 Results</h2><p>VOC 2007 数据集上的表现类似，普通 YOLO 模型达到了 63.3% 的平均精度均值（mAP），展示出了实时检测能力下的一定竞争力。基于 VGG-16 的 YOLO 模型精度更高，提升至 66.4%，但速度有所下降。作者通过与其他先进检测方法对比各类别检测结果，发现 YOLO 在部分类别（如小物体类别瓶子）上表现欠佳，反映出其在复杂场景下对小物体检测存在局限性</p>
+<h2 id="4-5-Generalizability-Person-Detection-in-Artwork"><a href="#4-5-Generalizability-Person-Detection-in-Artwork" class="headerlink" title="4.5. Generalizability: Person Detection in Artwork"></a>4.5. Generalizability: Person Detection in Artwork</h2><p>选用了两个艺术作品数据集，与其他检测器对比。结果显示，相比其他方法，YOLO 能更好地适应新领域。其原因在于，YOLO 将目标检测视为回归问题，从整幅图像中学习特征，这使它对目标的整体理解更优，不易受特定数据集偏差影响。例如在艺术作品数据集中，其他检测器因数据分布变化性能大幅下降，而 YOLO 仍能保持一定检测能力，充分证明了 YOLO 在新领域具有出色的泛化性。</p>
+<h1 id="5-Real-Time-Detection-In-The-Wild"><a href="#5-Real-Time-Detection-In-The-Wild" class="headerlink" title="5. Real-Time Detection In The Wild"></a>5. Real-Time Detection In The Wild</h1><table>
+<thead>
+<tr>
+<th>单词</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>webcam</td>
+<td>网络摄像机</td>
+</tr>
+</tbody></table>
+<p>简而言之，在真实场景下YOLO的实时性和准确性也得到了验证</p>
+<h1 id="6-Conclusion"><a href="#6-Conclusion" class="headerlink" title="6. Conclusion"></a>6. Conclusion</h1><p>YOLO，这是一种用于目标检测的统一模型。我们的模型构建简单，并且可以直接在完整图像上进行训练。与基于分类器的方法不同，YOLO 依据直接与检测性能相关的损失函数进行训练，并且整个模型是联合训练的。</p>
+<p>Fast YOLO 是文献记载中速度最快的通用目标检测器，而 YOLO 则推动了实时目标检测领域的技术发展。YOLO 在新领域也具有良好的泛化能力，使其成为依赖快速、稳健目标检测应用的理想选择。</p>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">论文精读的内容并没有打上翻译，更多的是我对这一段的总结概括和理解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Introduction"><span class="toc-number">2.</span> <span class="toc-text">1. Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Unified-Detection"><span class="toc-number">3.</span> <span class="toc-text">2. Unified Detection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Network-Design"><span class="toc-number">3.1.</span> <span class="toc-text">2.1. Network Design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Training"><span class="toc-number">3.2.</span> <span class="toc-text">2.2. Training</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-Inference"><span class="toc-number">3.3.</span> <span class="toc-text">2.3. Inference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-Limitations-of-YOLO"><span class="toc-number">3.4.</span> <span class="toc-text">2.4. Limitations of YOLO</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Comparison-to-Other-Detection-Systems"><span class="toc-number">4.</span> <span class="toc-text">3. Comparison to Other Detection Systems</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Experiments"><span class="toc-number">5.</span> <span class="toc-text">4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-Comparison-to-Other-Real-Time-Systems"><span class="toc-number">5.1.</span> <span class="toc-text">4.1. Comparison to Other Real-Time Systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-VOC-2007-Error-Analysis"><span class="toc-number">5.2.</span> <span class="toc-text">4.2. VOC 2007 Error Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Combining-Fast-R-CNN-and-YOLO"><span class="toc-number">5.3.</span> <span class="toc-text">4.3. Combining Fast R-CNN and YOLO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-VOC-2012-Results"><span class="toc-number">5.4.</span> <span class="toc-text">4.4. VOC 2012 Results</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-Generalizability-Person-Detection-in-Artwork"><span class="toc-number">5.5.</span> <span class="toc-text">4.5. Generalizability: Person Detection in Artwork</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Real-Time-Detection-In-The-Wild"><span class="toc-number">6.</span> <span class="toc-text">5. Real-Time Detection In The Wild</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Conclusion"><span class="toc-number">7.</span> <span class="toc-text">6. Conclusion</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/04/yolov1%20-%20%E8%AE%BA%E6%96%87/" title="YOLO V1 论文精读">YOLO V1 论文精读</a><time datetime="2025-03-04T07:41:37.036Z" title="发表于 2025-03-04 15:41:37">2025-03-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/03/yolov1%20-%20%E6%8A%80%E6%9C%AF/" title="YOLO V1 技术剖析">YOLO V1 技术剖析</a><time datetime="2025-03-03T07:02:01.353Z" title="发表于 2025-03-03 15:02:01">2025-03-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/26/ago%E6%8A%80%E6%9C%AF/" title="前者技术的补充">前者技术的补充</a><time datetime="2025-02-26T05:13:38.888Z" title="发表于 2025-02-26 13:13:38">2025-02-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/1/" title="无标题">无标题</a><time datetime="2025-02-25T12:57:57.127Z" title="发表于 2025-02-25 20:57:57">2025-02-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/25/%E7%B2%BE%E8%AF%BB%20Survey-Object%20Detection%20in%2020%20Years1/" title="精读 Survey-Object Detection in 20 Years">精读 Survey-Object Detection in 20 Years</a><time datetime="2025-02-25T12:24:13.833Z" title="发表于 2025-02-25 20:24:13">2025-02-25</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
