@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fast R-CNN 技术剖析 | Self-Improvement</title><meta name="author" content="Vane"><meta name="copyright" content="Vane"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="So Why Fast R-CNN？ 首先一个新方法的提出，不针对于特定场景，那就是基于前者问题的内容的改善 R-CNN利用深度卷积网络实现了目标检测任务，但是肯定是还有缺陷 首先是它并不是一个统一的过程，而是一个好几个阶段组合起来的类似流水线工厂的过程 而且训练的时候空间和时间都耗费很高 而且训练的非常慢 R-CNN的检测速度很慢就是因为对于每一个proposal都会执行ConvNet进行前向传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fast R-CNN 技术剖析">
+<meta property="og:url" content="http://example.com/2025/03/26/Fast%20R-CNN%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="Self-Improvement">
+<meta property="og:description" content="So Why Fast R-CNN？ 首先一个新方法的提出，不针对于特定场景，那就是基于前者问题的内容的改善 R-CNN利用深度卷积网络实现了目标检测任务，但是肯定是还有缺陷 首先是它并不是一个统一的过程，而是一个好几个阶段组合起来的类似流水线工厂的过程 而且训练的时候空间和时间都耗费很高 而且训练的非常慢 R-CNN的检测速度很慢就是因为对于每一个proposal都会执行ConvNet进行前向传">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/touxiang1.jpg">
+<meta property="article:published_time" content="2025-03-26T12:13:41.186Z">
+<meta property="article:modified_time" content="2025-03-26T13:44:19.373Z">
+<meta property="article:author" content="Vane">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="计算机视觉">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="方法分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/touxiang1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Fast R-CNN 技术剖析",
+  "url": "http://example.com/2025/03/26/Fast%20R-CNN%E6%8A%80%E6%9C%AF/",
+  "image": "http://example.com/img/touxiang1.jpg",
+  "datePublished": "2025-03-26T12:13:41.186Z",
+  "dateModified": "2025-03-26T13:44:19.373Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Vane",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/03/26/Fast%20R-CNN%E6%8A%80%E6%9C%AF/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Fast R-CNN 技术剖析',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">Fast R-CNN 技术剖析</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Fast R-CNN 技术剖析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-26T12:13:41.186Z" title="发表于 2025-03-26 20:13:41">2025-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-26T13:44:19.373Z" title="更新于 2025-03-26 21:44:19">2025-03-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E5%89%96%E6%9E%90/">技术剖析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><h1 id="So-Why-Fast-R-CNN？"><a href="#So-Why-Fast-R-CNN？" class="headerlink" title="So Why Fast R-CNN？"></a>So Why Fast R-CNN？</h1><p> 首先一个新方法的提出，不针对于特定场景，那就是基于前者问题的内容的改善</p>
+<p>R-CNN利用深度卷积网络实现了目标检测任务，但是肯定是还有<strong>缺陷</strong></p>
+<p>首先是它并不是一个统一的过程，而是一个好几个阶段组合起来的类似流水线工厂的过程</p>
+<p>而且训练的时候空间和时间都耗费很高</p>
+<p>而且训练的非常慢</p>
+<p>R-CNN的检测速度很慢就是因为对于每一个proposal都会执行ConvNet进行前向传播而没有共享计算</p>
+<h1 id="SPP-Net的贡献"><a href="#SPP-Net的贡献" class="headerlink" title="SPP-Net的贡献"></a>SPP-Net的贡献</h1><p>SPP-Net(Spatial pyramid pooling networks 空间金字塔池化网络)提出了通过<strong>共享计算</strong>来实现R-CNN的加速</p>
+<p>在图像分类以及目标检测过程中输入CNN的图像尺寸是固定的，一般都需要先将图像进行裁剪才能适应</p>
+<p>这样对于输入图像会有限制，这样的原因是<strong>全连接层需要固定尺寸的输入</strong></p>
+<p>SPP作用位置：<strong>卷积层后，全连接层前</strong>。</p>
+<p>可以通过在全连接层前添加一个层，使其针对任意尺寸的输入都可以输出固定的尺寸，这就是 Spatial Pyramid Pooling Layer</p>
+<p><img src="/../blogimg/image-20250326203116350.png" alt="image-20250326203116350"></p>
+<p>输入图像卷积层之后提取到feature map最后的</p>
+<p>操作方式：将卷积输出的特征图划分为多尺度网格（如4×4, 2×2, 1×1），对每个网格执行最大池化，并将结果拼接为固定长度特征向量。</p>
+<p>输出固定性：无论输入图像尺寸如何变化，SPP层输出的特征向量长度固定。</p>
+<p><img src="/../blogimg/image-20250326203526289.png" alt="image-20250326203526289"></p>
+<p><img src="/../blogimg/image-20250326203539664.png" alt="image-20250326203539664"></p>
+<h1 id="Fast-R-CNN算法流程"><a href="#Fast-R-CNN算法流程" class="headerlink" title="Fast R-CNN算法流程"></a>Fast R-CNN算法流程</h1><p><img src="/../blogimg/image-20250326204837370.png" alt="image-20250326204837370"></p>
+<p><img src="/../blogimg/image-20250326205026433.png" alt="image-20250326205026433"></p>
+<p>(1)输入图像通过深度网络中的卷积层(VGG等)，对图片进行特征提取，得到图片的特征图</p>
+<p>(2)通过Selective Search算法得到proposal(通常2000个)</p>
+<p>(3)对proposal进行ROI pooling(感兴趣区域池化)，对磁层的输入作为每一个感兴趣区域的特征向量</p>
+<p>(4)将感兴趣区域的特征向量于全连接层相连，并定义了多任务损失函数，分别与softmax分类器和bounding box 回归器项链，分别得到proposal的类别以及坐标包围框</p>
+<p>(5)对得到的包围框进行非极大值抑制(NMS)得到最终的检测结果</p>
+<h1 id="Compare-with-R-CNN"><a href="#Compare-with-R-CNN" class="headerlink" title="Compare with R-CNN"></a>Compare with R-CNN</h1><p>(1)首先是还是有2000个proposal，但是之前是将所有输入框都输入到网络里了，现在是先原始图片输入到卷积网络中得到feature map然后再对feature map提取proposal这样防止了之前重合的proposal的卷积重复计算，大大减少了计算量。</p>
+<p>(2)由于proposal大小不一，得到的特征框需要抓换为相同大小，这一步通过ROI池化层实现(ROI-&gt;region of interest 也就是我们想要检测的目标)</p>
+<p>(3)Fast R-CNN里没有SVM分类器和回归器，分类和预测框的位置都是通过卷积神经网络输出</p>
+<p>(4)最后使用SVD代替全连接层来提高速度</p>
+<h1 id="ROI-Pooling-Region-of-Interest"><a href="#ROI-Pooling-Region-of-Interest" class="headerlink" title="ROI Pooling(Region of Interest)"></a>ROI Pooling(Region of Interest)</h1><p>输入的是feature map，输出是大小固定的channel × H × W的向量，ROI Pooling是将一个个大小不同的region proposals映射成为大小固定的W × H 的矩形框。</p>
+<p>它的作业是根据region proposal的位置坐标对应在feature map 中相应区域池化为固定尺寸的feature map，以便于进行后续的分类和输出回归框操作，可以加速处理。</p>
+<p>ROI Pooling有两个输入，一个是图片进入CNN后的特征图，另一个是区域的边框。ROI 的输出是一个region_nums x channels x W x H的向量。</p>
+<p>ROI Pooling是一个类似于SPP的简化版本，SPP是多尺度池化后concat组成新特征，而ROI只是一个特殊尺度，将任意维度的特征矩阵缩放成固定维度</p>
+<p>高和宽都平均分为7*7的小块，然后在每一个小块做max pooling操作，channel维度不变，这样做能使输出维度固定，同时ROI Pooling不是多尺度的池化，梯度回传非常方便，为fine-tune卷积层提供了条件。</p>
+<h1 id="多任务损失函数"><a href="#多任务损失函数" class="headerlink" title="多任务损失函数"></a>多任务损失函数</h1><p><img src="/../blogimg/image-20250326212832353.png" alt="image-20250326212832353"></p>
+<p>Fast R-CNN 的总损失函数是分类损失和定位损失的加权和</p>
+<h2 id="分类损失"><a href="#分类损失" class="headerlink" title="分类损失"></a>分类损失</h2><p><img src="/../blogimg/image-20250326212910898.png" alt="image-20250326212910898"></p>
+<p><em>p</em>&#x3D;(<em>p</em>0,<em>p</em>1,…,pk) 是分类器输出的 <strong>softmax 概率分布</strong>，表示候选区域属于每个类别的概率（共 K+1<em>K</em>+1 类，包含背景类）</p>
+<p><em>u</em> 是候选区域的 <strong>真实类别标签</strong>（整数，取值范围为 0≤u≤K）。</p>
+<p>若模型对真实类别的预测概率 pu 越高（接近 1），则损失越小；反之，若预测概率低（接近 0），损失会急剧增大</p>
+<p><img src="/../blogimg/image-20250326213357185.png" alt="image-20250326213357185"></p>
+<h2 id="定位损失"><a href="#定位损失" class="headerlink" title="定位损失"></a>定位损失</h2><p><img src="/../blogimg/image-20250326212929538.png" alt="image-20250326212929538"></p>
+<p>在误差较小时（∣d∣&lt;1）使用L2损失，梯度稳定；误差较大时转为L1损失，减少异常值影响</p>
+<p>proposal -&gt; P &#x3D; (Px,Py,Pw,Ph) 表示中心坐标，宽度，高度。</p>
+<p>ground truth -&gt; G(Gx,Gy,Gw,Gh) </p>
+<p>tu是模型预测的偏移量(针对类别u)</p>
+<p><img src="/../blogimg/image-20250326214043553.png" alt="image-20250326214043553"></p>
+<p>这种参数化方式使偏移量对尺度变化不敏感，提升回归稳定性。</p>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">论文精读的内容并没有打上翻译，更多的是我对这一段的总结概括和理解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#So-Why-Fast-R-CNN%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">So Why Fast R-CNN？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SPP-Net%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="toc-number">2.</span> <span class="toc-text">SPP-Net的贡献</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Fast-R-CNN%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">Fast R-CNN算法流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compare-with-R-CNN"><span class="toc-number">4.</span> <span class="toc-text">Compare with R-CNN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROI-Pooling-Region-of-Interest"><span class="toc-number">5.</span> <span class="toc-text">ROI Pooling(Region of Interest)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">多任务损失函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB%E6%8D%9F%E5%A4%B1"><span class="toc-number">6.1.</span> <span class="toc-text">分类损失</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D%E6%8D%9F%E5%A4%B1"><span class="toc-number">6.2.</span> <span class="toc-text">定位损失</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/26/Fast%20R-CNN%E6%8A%80%E6%9C%AF/" title="Fast R-CNN 技术剖析">Fast R-CNN 技术剖析</a><time datetime="2025-03-26T12:13:41.186Z" title="发表于 2025-03-26 20:13:41">2025-03-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/21/R-CNN%E7%AE%97%E6%B3%95/" title="R-CNN 技术剖析">R-CNN 技术剖析</a><time datetime="2025-03-21T12:03:51.550Z" title="发表于 2025-03-21 20:03:51">2025-03-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/ResNet%20-%20%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" title="ResNet 代码实现(Pytorch)">ResNet 代码实现(Pytorch)</a><time datetime="2025-03-18T08:08:41.323Z" title="发表于 2025-03-18 16:08:41">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/ResNet%20-%20%E8%AE%BA%E6%96%87/" title="ResNet 论文精读">ResNet 论文精读</a><time datetime="2025-03-18T06:34:50.734Z" title="发表于 2025-03-18 14:34:50">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/04/yolov1%20-%20%E8%AE%BA%E6%96%87/" title="YOLO V1 论文精读">YOLO V1 论文精读</a><time datetime="2025-03-04T07:41:37.036Z" title="发表于 2025-03-04 15:41:37">2025-03-04</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
