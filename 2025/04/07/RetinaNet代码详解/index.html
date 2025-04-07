@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RetinaNet 代码详解(MMDetection) | Self-Improvement</title><meta name="author" content="Vane"><meta name="copyright" content="Vane"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="由于网上好多好多的复现内容各有不同，经过老师的推荐选择了集成效果很好的MMDetetion工具中的代码进行复现 RetinaNet 涉及的组件包括： Backbone、Neck、Head、BBox Assigner、BBox Encoder Decoder、Loss 和 BBox PostProcess。下面按照顺序结合代码详细分析。 版本问题啊我用的这个版本是v3.3.0  与网上的教程之类的可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RetinaNet 代码详解(MMDetection)">
+<meta property="og:url" content="http://example.com/2025/04/07/RetinaNet%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Self-Improvement">
+<meta property="og:description" content="由于网上好多好多的复现内容各有不同，经过老师的推荐选择了集成效果很好的MMDetetion工具中的代码进行复现 RetinaNet 涉及的组件包括： Backbone、Neck、Head、BBox Assigner、BBox Encoder Decoder、Loss 和 BBox PostProcess。下面按照顺序结合代码详细分析。 版本问题啊我用的这个版本是v3.3.0  与网上的教程之类的可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/touxiang1.jpg">
+<meta property="article:published_time" content="2025-04-07T09:49:34.064Z">
+<meta property="article:modified_time" content="2025-04-07T13:37:42.547Z">
+<meta property="article:author" content="Vane">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/touxiang1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RetinaNet 代码详解(MMDetection)",
+  "url": "http://example.com/2025/04/07/RetinaNet%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/",
+  "image": "http://example.com/img/touxiang1.jpg",
+  "datePublished": "2025-04-07T09:49:34.064Z",
+  "dateModified": "2025-04-07T13:37:42.547Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Vane",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/07/RetinaNet%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RetinaNet 代码详解(MMDetection)',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">RetinaNet 代码详解(MMDetection)</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RetinaNet 代码详解(MMDetection)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-07T09:49:34.064Z" title="发表于 2025-04-07 17:49:34">2025-04-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-07T13:37:42.547Z" title="更新于 2025-04-07 21:37:42">2025-04-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/">代码实现</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><p>由于网上好多好多的复现内容各有不同，经过老师的推荐选择了集成效果很好的MMDetetion工具中的代码进行复现</p>
+<p>RetinaNet 涉及的组件包括： Backbone、Neck、Head、BBox Assigner、BBox Encoder Decoder、Loss 和 BBox PostProcess。下面按照顺序结合代码详细分析。</p>
+<h1 id="版本问题"><a href="#版本问题" class="headerlink" title="版本问题"></a>版本问题</h1><p>啊我用的这个版本是<strong>v3.3.0</strong> </p>
+<p>与网上的教程之类的可能有所出入</p>
+<p>我首先在这个路径下configs&#x2F;retinanet找到了类似如此的配置文件</p>
+<p><img src="/../blogimg/image-20250407190414182.png" alt="image-20250407190414182"></p>
+<p>首先来解释一下这些名字的配置文件对应位置上的含义</p>
+<p>retinanet显而易见是算法的名称</p>
+<p>r50这个位置表达的是骨架网络的名称</p>
+<p>caffe 和 PyTorch 是指 Bottleneck 模块的区别，省略情况下表示是 PyTorch，后面会详细说明</p>
+<p>fpn 表示 Neck 模块采用了 FPN 结构</p>
+<p>mstrain 表示多尺度训练，一般对应的是 pipeline 中 <code>Resize</code> 类</p>
+<p>1x 表示 1 倍数的 epoch 训练即 12 个 epoch，2x 则表示 24 个 epcoh</p>
+<p>coco 表示在 COCO 数据集上训练</p>
+<p><img src="/../blogimg/image-20250407191303808.png" alt="image-20250407191303808"></p>
+<p>首先是找了这个文件来对应哈</p>
+<p>然后里面的内容是如此</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_base_ = [</span><br><span class="line">    <span class="string">&#x27;../_base_/models/retinanet_r50_fpn.py&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;../_base_/datasets/coco_detection.py&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;../_base_/schedules/schedule_1x.py&#x27;</span>, <span class="string">&#x27;../_base_/default_runtime.py&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;./retinanet_tta.py&#x27;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># optimizer</span></span><br><span class="line">optim_wrapper = <span class="built_in">dict</span>(</span><br><span class="line">    optimizer=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;SGD&#x27;</span>, lr=<span class="number">0.01</span>, momentum=<span class="number">0.9</span>, weight_decay=<span class="number">0.0001</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我就顺着这个路径去找啊</p>
+<p><strong>retinanet_r50_fpn.py</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># model settings</span></span><br><span class="line">model = <span class="built_in">dict</span>(</span><br><span class="line">    <span class="built_in">type</span>=<span class="string">&#x27;RetinaNet&#x27;</span>,</span><br><span class="line">    data_preprocessor=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;DetDataPreprocessor&#x27;</span>,</span><br><span class="line">        mean=[<span class="number">123.675</span>, <span class="number">116.28</span>, <span class="number">103.53</span>],</span><br><span class="line">        std=[<span class="number">58.395</span>, <span class="number">57.12</span>, <span class="number">57.375</span>],</span><br><span class="line">        bgr_to_rgb=<span class="literal">True</span>,</span><br><span class="line">        pad_size_divisor=<span class="number">32</span>),</span><br><span class="line">    backbone=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;ResNet&#x27;</span> ,</span><br><span class="line">        depth=<span class="number">50</span>,</span><br><span class="line">        num_stages=<span class="number">4</span>,</span><br><span class="line">        out_indices=(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>),</span><br><span class="line">        frozen_stages=<span class="number">1</span>,</span><br><span class="line">        norm_cfg=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;BN&#x27;</span>, requires_grad=<span class="literal">True</span>),</span><br><span class="line">        norm_eval=<span class="literal">True</span>,</span><br><span class="line">        style=<span class="string">&#x27;pytorch&#x27;</span>,</span><br><span class="line">        init_cfg=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;Pretrained&#x27;</span>, checkpoint=<span class="string">&#x27;torchvision://resnet50&#x27;</span>)),</span><br><span class="line">    neck=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;FPN&#x27;</span>,</span><br><span class="line">        in_channels=[<span class="number">256</span>, <span class="number">512</span>, <span class="number">1024</span>, <span class="number">2048</span>],</span><br><span class="line">        out_channels=<span class="number">256</span>,</span><br><span class="line">        start_level=<span class="number">1</span>,</span><br><span class="line">        add_extra_convs=<span class="string">&#x27;on_input&#x27;</span>,</span><br><span class="line">        num_outs=<span class="number">5</span>),</span><br><span class="line">    bbox_head=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;RetinaHead&#x27;</span>,</span><br><span class="line">        num_classes=<span class="number">80</span>,</span><br><span class="line">        in_channels=<span class="number">256</span>,</span><br><span class="line">        stacked_convs=<span class="number">4</span>,</span><br><span class="line">        feat_channels=<span class="number">256</span>,</span><br><span class="line">        anchor_generator=<span class="built_in">dict</span>(</span><br><span class="line">            <span class="built_in">type</span>=<span class="string">&#x27;AnchorGenerator&#x27;</span>,</span><br><span class="line">            octave_base_scale=<span class="number">4</span>,</span><br><span class="line">            scales_per_octave=<span class="number">3</span>,</span><br><span class="line">            ratios=[<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="number">2.0</span>],</span><br><span class="line">            strides=[<span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">64</span>, <span class="number">128</span>]),</span><br><span class="line">        bbox_coder=<span class="built_in">dict</span>(</span><br><span class="line">            <span class="built_in">type</span>=<span class="string">&#x27;DeltaXYWHBBoxCoder&#x27;</span>,</span><br><span class="line">            target_means=[<span class="number">.0</span>, <span class="number">.0</span>, <span class="number">.0</span>, <span class="number">.0</span>],</span><br><span class="line">            target_stds=[<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>]),</span><br><span class="line">        loss_cls=<span class="built_in">dict</span>(</span><br><span class="line">            <span class="built_in">type</span>=<span class="string">&#x27;FocalLoss&#x27;</span>,</span><br><span class="line">            use_sigmoid=<span class="literal">True</span>,</span><br><span class="line">            gamma=<span class="number">2.0</span>,</span><br><span class="line">            alpha=<span class="number">0.25</span>,</span><br><span class="line">            loss_weight=<span class="number">1.0</span>),</span><br><span class="line">        loss_bbox=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;L1Loss&#x27;</span>, loss_weight=<span class="number">1.0</span>)),</span><br><span class="line">    <span class="comment"># model training and testing settings</span></span><br><span class="line">    train_cfg=<span class="built_in">dict</span>(</span><br><span class="line">        assigner=<span class="built_in">dict</span>(</span><br><span class="line">            <span class="built_in">type</span>=<span class="string">&#x27;MaxIoUAssigner&#x27;</span>,</span><br><span class="line">            pos_iou_thr=<span class="number">0.5</span>,</span><br><span class="line">            neg_iou_thr=<span class="number">0.4</span>,</span><br><span class="line">            min_pos_iou=<span class="number">0</span>,</span><br><span class="line">            ignore_iof_thr=-<span class="number">1</span>),</span><br><span class="line">        sampler=<span class="built_in">dict</span>(</span><br><span class="line">            <span class="built_in">type</span>=<span class="string">&#x27;PseudoSampler&#x27;</span>),  <span class="comment"># Focal loss should use PseudoSampler</span></span><br><span class="line">        allowed_border=-<span class="number">1</span>,</span><br><span class="line">        pos_weight=-<span class="number">1</span>,</span><br><span class="line">        debug=<span class="literal">False</span>),</span><br><span class="line">    test_cfg=<span class="built_in">dict</span>(</span><br><span class="line">        nms_pre=<span class="number">1000</span>,</span><br><span class="line">        min_bbox_size=<span class="number">0</span>,</span><br><span class="line">        score_thr=<span class="number">0.05</span>,</span><br><span class="line">        nms=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;nms&#x27;</span>, iou_threshold=<span class="number">0.5</span>),</span><br><span class="line">        max_per_img=<span class="number">100</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Backbone"><a href="#Backbone" class="headerlink" title="Backbone"></a>Backbone</h1><p>其中对应的backbone的内容</p>
+<p><img src="/../blogimg/image-20250407191744850.png" alt="image-20250407191744850"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">backbone=<span class="built_in">dict</span>(</span><br><span class="line">    <span class="built_in">type</span>=<span class="string">&#x27;ResNet&#x27;</span> ,</span><br><span class="line">    <span class="comment">#指定使用的骨干网络类型为ResNet</span></span><br><span class="line">    </span><br><span class="line">    depth=<span class="number">50</span>,</span><br><span class="line">    <span class="comment">#使用ResNet-50结构（50层深度）</span></span><br><span class="line">    </span><br><span class="line">    num_stages=<span class="number">4</span>,</span><br><span class="line">    <span class="comment"># ResNet 系列包括 stem+ 4个 stage 输出</span></span><br><span class="line">    </span><br><span class="line">    out_indices=(<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>),</span><br><span class="line">    <span class="comment"># 表示本模块输出的特征图索引，(0, 1, 2, 3),表示4个 stage 输出都需要，</span></span><br><span class="line">    <span class="comment"># 其 stride 为 (4,8,16,32)，channel 为 (256, 512, 1024, 2048)</span></span><br><span class="line">    </span><br><span class="line">    frozen_stages=<span class="number">1</span>,</span><br><span class="line">    <span class="comment"># 所有的 BN 层的可学习参数都需要梯度</span></span><br><span class="line">    </span><br><span class="line">    norm_cfg=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;BN&#x27;</span>, requires_grad=<span class="literal">True</span>),</span><br><span class="line">	<span class="comment"># 所有的 BN 层的可学习参数都需要梯度</span></span><br><span class="line">    </span><br><span class="line">    norm_eval=<span class="literal">True</span>,</span><br><span class="line">    <span class="comment"># backbone 所有的 BN 层的均值和方差都直接采用全局预训练值，不进行更新</span></span><br><span class="line">    </span><br><span class="line">    style=<span class="string">&#x27;pytorch&#x27;</span>,</span><br><span class="line">     <span class="comment"># 默认采用 pytorch 模式</span></span><br><span class="line">    </span><br><span class="line">    init_cfg=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;Pretrained&#x27;</span>, checkpoint=<span class="string">&#x27;torchvision://resnet50&#x27;</span>)),</span><br><span class="line">	<span class="comment">#init_cfg：初始化配置</span></span><br><span class="line">    <span class="comment">#type=&#x27;Pretrained&#x27;：使用预训练权重</span></span><br><span class="line">	<span class="comment">#checkpoint=&#x27;torchvision://resnet50&#x27;：加载torchvision提供的预训练ResNet-50权重</span></span><br></pre></td></tr></table></figure>
+
+<p>RetinaNet 算法采用了 ResNet50 作为 Backbone, 并且考虑到整个目标检测网络比较大，前面部分网络没有进行训练，BN 也不会进行参数更新。需要说明的是上述默认配置是经过前人工作和 OpenMMLab 在 COCO 数据集上不断实践的结果。推荐大家直接使用该配置模式，效果相对比较稳定。</p>
+<p>对应的路径为 mmdet&#x2F;models&#x2F;backbones&#x2F;resnet.py</p>
+<h2 id="1-out-indices"><a href="#1-out-indices" class="headerlink" title="(1) out_indices"></a><strong>(1) out_indices</strong></h2><p>ResNet 提出了骨架网络设计范式即 <code>stem+n stage+ cls head</code>，对于 ResNet 而言，其实际 forward 流程是 <code>stem -&gt; 4 个 stage -&gt; 分类 head</code>，stem 的输出 stride 是 4，而 4 个 stage 的输出 stride 是 4,8,16,32，这 4 个输出就对应 <code>out_indices</code> 索引。例如如果你想要输出 stride&#x3D;4 的特征图，那么你可以设置 <code>out_indices=(0,)</code>，如果你想要输出 stride&#x3D;4 和 8 的特征图，那么你可以设置 <code>out_indices=(0, 1)</code>。</p>
+<p><strong><code>stem</code>（前置卷积层）</strong>：通常是 <code>7x7 conv + BN + ReLU + MaxPool</code>，用于快速降采样。</p>
+<p><strong>输出 stride &#x3D; 4</strong>（输入图像尺寸缩小到 <code>1/4</code>）。</p>
+<p><strong>4 stages（阶段）</strong></p>
+<p>每个 <code>stage</code> 由多个 <code>Bottleneck</code> 或 <code>BasicBlock</code> 组成，逐步降采样。</p>
+<p>各 <code>stage</code> 的输出 <code>stride</code> 分别为：</p>
+<ul>
+<li><code>stage0</code> → <code>stride=4</code>（与 <code>stem</code> 相同）</li>
+<li><code>stage1</code> → <code>stride=8</code></li>
+<li><code>stage2</code> → <code>stride=16</code></li>
+<li><code>stage3</code> → <code>stride=32</code></li>
+</ul>
+<p>这些 <code>stride</code> 值对应特征图相对于输入图像的缩放比例（如 <code>stride=32</code> 表示特征图尺寸是输入的 <code>1/32</code>）。</p>
+<p><strong><code>cls head</code>（分类头）</strong>：用于分类任务（如 <code>GlobalAvgPool + FC</code>）</p>
+<p><code>out_indices</code> <strong>指定需要保留哪些 <code>stage</code> 的输出</strong>，用于后续任务（如 FPN）。</p>
+<ul>
+<li><strong>示例</strong>：<ul>
+<li><code>out_indices=(0,)</code> → 只保留 <code>stage0</code> 的输出（<code>stride=4</code>）。</li>
+<li><code>out_indices=(0, 1)</code> → 保留 <code>stage0</code> 和 <code>stage1</code> 的输出（<code>stride=4</code> 和 <code>8</code>）。</li>
+<li><code>out_indices=(0, 1, 2, 3)</code> → 保留所有 4 个 <code>stage</code> 的输出（RetinaNet + FPN 的典型配置）。</li>
+</ul>
+</li>
+</ul>
+<p>因为 RetinaNet 后面需要接 FPN，故需要输出 4 个尺度特征图，简要代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, layer_name <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="variable language_">self</span>.res_layers):</span><br><span class="line">    res_layer = <span class="built_in">getattr</span>(<span class="variable language_">self</span>, layer_name)  <span class="comment"># 获取当前 stage 的层（如 stage0, stage1...）</span></span><br><span class="line">    x = res_layer(x)                      <span class="comment"># 前向计算当前 stage</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">in</span> <span class="variable language_">self</span>.out_indices:             <span class="comment"># 如果当前 stage 的索引在 out_indices 中</span></span><br><span class="line">        outs.append(x)                    <span class="comment"># 保留该特征图到输出列表</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>res_layers</code></strong>：存储 ResNet 的 4 个 <code>stage</code> 的名称（如 <code>[&#39;layer1&#39;, &#39;layer2&#39;, &#39;layer3&#39;, &#39;layer4&#39;]</code>）。</li>
+<li><strong><code>outs</code></strong>：最终输出的特征图列表，其内容由 <code>out_indices</code> 决定。</li>
+</ul>
+<p><strong>Bottleneck</strong> 和 <strong>BasicBlock</strong> 是两种不同的**残差块（Residual Block）**设计，用于构建网络的不同深度版本</p>
+<h2 id="2-frozen-stages"><a href="#2-frozen-stages" class="headerlink" title="(2) frozen_stages"></a>(2) <strong>frozen_stages</strong></h2><p>该参数表示你想冻结前几个 stages 的权重，ResNet 结构包括 stem+4 stage</p>
+<ul>
+<li>frozen_stages&#x3D;-1，表示全部可学习</li>
+<li>frozen_stage&#x3D;0，表示stem权重固定</li>
+<li>frozen_stages&#x3D;1，表示 stem 和第一个 stage 权重固定</li>
+<li>frozen_stages&#x3D;2，表示 stem 和前两个 stage 权重固定</li>
+</ul>
+<p>冻结权重需要同时满足两个条件：</p>
+<ol>
+<li><strong>设置为评估模式（eval）</strong>：关闭 <code>Dropout</code>、固定 <code>BatchNorm</code> 的均值和方差。</li>
+<li><strong>禁用梯度计算（requires_grad&#x3D;False）</strong>：避免优化器更新参数。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_freeze_stages</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 检查是否需要冻结 stem（frozen_stages &gt;= 0 表示至少冻结 stem）</span></span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>.frozen_stages &gt;= <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 判断是否使用 &quot;deep_stem&quot;（一种更复杂的 stem 结构）</span></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.deep_stem:</span><br><span class="line">            <span class="comment"># 将 stem 设为评估模式（不更新 BN 的均值和方差）</span></span><br><span class="line">            <span class="variable language_">self</span>.stem.<span class="built_in">eval</span>()</span><br><span class="line">            <span class="comment"># 遍历 stem 的所有参数，关闭梯度计算</span></span><br><span class="line">            <span class="keyword">for</span> param <span class="keyword">in</span> <span class="variable language_">self</span>.stem.parameters():</span><br><span class="line">                param.requires_grad = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 标准 ResNet 的 stem 只有 conv1 + norm1（BN 层）</span></span><br><span class="line">            <span class="variable language_">self</span>.norm1.<span class="built_in">eval</span>()  <span class="comment"># 固定 BN 层的统计量</span></span><br><span class="line">            <span class="comment"># 遍历 conv1 和 norm1 的参数</span></span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> [<span class="variable language_">self</span>.conv1, <span class="variable language_">self</span>.norm1]:</span><br><span class="line">                <span class="keyword">for</span> param <span class="keyword">in</span> m.parameters():</span><br><span class="line">                    param.requires_grad = <span class="literal">False</span>  <span class="comment"># 关闭梯度</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 冻结前 n 个 stage（stage1, stage2...）</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="variable language_">self</span>.frozen_stages + <span class="number">1</span>):</span><br><span class="line">        <span class="comment"># 获取第 i 个 stage 的层（如 layer1, layer2）</span></span><br><span class="line">        m = <span class="built_in">getattr</span>(<span class="variable language_">self</span>, <span class="string">f&#x27;layer<span class="subst">&#123;i&#125;</span>&#x27;</span>)</span><br><span class="line">        m.<span class="built_in">eval</span>()  <span class="comment"># 设为评估模式</span></span><br><span class="line">        <span class="comment"># 关闭该 stage 所有参数的梯度</span></span><br><span class="line">        <span class="keyword">for</span> param <span class="keyword">in</span> m.parameters():</span><br><span class="line">            param.requires_grad = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong><code>eval()</code> 模式</strong><ul>
+<li>让 <code>BatchNorm</code>（BN）层使用<strong>预计算的全局均值&#x2F;方差</strong>，而不是根据当前 batch 计算。</li>
+<li>关闭 <code>Dropout</code> 等训练时特有的行为。</li>
+</ul>
+</li>
+<li><strong><code>requires_grad=False</code></strong><ul>
+<li>告诉 PyTorch <strong>不要计算这些参数的梯度</strong>，优化器不会更新它们。</li>
+</ul>
+</li>
+<li><strong><code>deep_stem</code></strong><ul>
+<li>ResNet 的变种（如 ResNetV1d）用更复杂的 stem 结构（多个卷积层），普通 ResNet 只有 <code>conv1 + bn1</code>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>关键问题：为什么需要重写 <code>train()</code> 方法？</strong></p>
+<p>默认情况下，调用 <code>model.train()</code> 会将所有模块（包括已冻结的部分）切换回训练模式，导致 <code>BN</code> 层重新计算统计量。因此需要 <strong>在训练模式下强制保持冻结部分的 <code>eval</code> 状态</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">self, mode=<span class="literal">True</span></span>):</span><br><span class="line">    <span class="comment"># 调用父类的 train() 方法（会将所有模块设为 train 模式）</span></span><br><span class="line">    <span class="built_in">super</span>(ResNet, <span class="variable language_">self</span>).train(mode)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 重新冻结 stem 和 stages（覆盖默认行为）</span></span><br><span class="line">    <span class="variable language_">self</span>._freeze_stages()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果开启 norm_eval，强制所有 BN 层保持 eval 模式</span></span><br><span class="line">    <span class="keyword">if</span> mode <span class="keyword">and</span> <span class="variable language_">self</span>.norm_eval:</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> <span class="variable language_">self</span>.modules():</span><br><span class="line">            <span class="comment"># 只对 BN 层生效</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, _BatchNorm):</span><br><span class="line">                m.<span class="built_in">eval</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-norm-cfg-和-norm-eval"><a href="#3-norm-cfg-和-norm-eval" class="headerlink" title="(3) norm_cfg 和 norm_eval"></a><strong>(3) norm_cfg 和 norm_eval</strong></h2><p><code>norm_cfg</code> 表示所采用的归一化算子，一般是 BN 或者 GN，而 <code>requires_grad</code> 表示该算子是否需要梯度，也就是是否进行参数更新，而布尔参数 <code>norm_eval</code> 是用于控制整个骨架网络的归一化算子是否需要变成 eval 模式。</p>
+<p>RetinaNet 中用法是 <code>norm_cfg=dict(type=&#39;BN&#39;, requires_grad=True)</code>，表示通过 Registry 模式实例化 BN 类，并且设置为参数可学习。在 MMDetection 中会常看到通过字典配置方式来实例化某个类的做法， 底层是采用了装饰器模式进行构建，最大好处是扩展性极强，类和类之间的耦合度降低。</p>
+<h2 id="4-style"><a href="#4-style" class="headerlink" title="(4) style"></a><strong>(4) style</strong></h2><p><code>style=&#39;caffe&#39;</code> 和 <code>style=&#39;pytorch&#39;</code> 的差别就在 <code>Bottleneck</code> 模块中</p>
+<p><img src="/../blogimg/image-20250407205636215.png" alt="image-20250407205636215"></p>
+<p><code>Bottleneck</code> 是标准的 1x1-3x3-1x1 结构，考虑 stride&#x3D;2 下采样的场景，caffe 模式下，stride 参数放置在第一个 1x1 卷积上，而 Pyorch 模式下，stride 放在第二个 3x3 卷积上</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if self.style == &#x27;pytorch&#x27;:</span><br><span class="line">        self.conv1_stride = 1</span><br><span class="line">        self.conv2_stride = stride</span><br><span class="line">    else:</span><br><span class="line">        self.conv1_stride = stride</span><br><span class="line">        self.conv2_stride = 1</span><br></pre></td></tr></table></figure>
+
+<p>torchvision 的 resnet 和早期 release 的 resnet 版本不一样，使得目标检测框架在使用 Backbone 的时候有两种不同的配置，不过目前新网络都是采用 PyTorch 模式。</p>
+<h1 id="Neck"><a href="#Neck" class="headerlink" title="Neck"></a>Neck</h1><p>Neck 模块即为 FPN，其简要结构如下所示：</p>
+<p><img src="/../blogimg/image-20250407205927562.png" alt="image-20250407205927562"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">neck=<span class="built_in">dict</span>(</span><br><span class="line">    <span class="built_in">type</span>=<span class="string">&#x27;FPN&#x27;</span>,</span><br><span class="line">    </span><br><span class="line">    in_channels=[<span class="number">256</span>, <span class="number">512</span>, <span class="number">1024</span>, <span class="number">2048</span>],</span><br><span class="line">    <span class="comment"># ResNet输出的4个尺度特征图通道数</span></span><br><span class="line">    </span><br><span class="line">    out_channels=<span class="number">256</span>,</span><br><span class="line">    <span class="comment"># FPN输出的每个尺度输出特征图通道</span></span><br><span class="line">    </span><br><span class="line">    start_level=<span class="number">1</span>,</span><br><span class="line">	<span class="comment"># 从输入多尺度特征图的第几个开始计算</span></span><br><span class="line">    </span><br><span class="line">    add_extra_convs=<span class="string">&#x27;on_input&#x27;</span>,</span><br><span class="line">    <span class="comment"># 额外输出层的特征图来源</span></span><br><span class="line">    </span><br><span class="line">    num_outs=<span class="number">5</span>  <span class="comment"># FPN 输出特征图个数),</span></span><br></pre></td></tr></table></figure>
+
+<p>前面说过 ResNet 输出 4 个不同尺度特征图 (c2,c3,c4,c5)，stride 分别是 (4,8,16,32)，通道数为 (256,512,1024,2048),通过配置文件我们可以知道：</p>
+<ul>
+<li><code>start_level=1</code> 说明虽然输入是 4 个特征图，但是实际上 FPN 中仅仅用了后面三个</li>
+<li><code>num_outs=5</code> 说明 FPN 模块虽然是接收 3 个特征图，但是输出 5 个特征图</li>
+<li><code>add_extra_convs=&#39;on_input&#39;</code> 说明额外输出的 2 个特征图的来源是骨架网络输出，而不是 FPN 层本身输出又作为后面层的输入</li>
+<li><code>out_channels=256</code> 说明了 5 个输出特征图的通道数都是 256</li>
+<li></li>
+</ul>
+<p><strong>输出特征图生成流程</strong></p>
+<ol>
+<li><strong>默认输出（P3-P5）</strong>：<ul>
+<li>输入：C3 (stride&#x3D;8), C4 (stride&#x3D;16), C5 (stride&#x3D;32)</li>
+<li>FPN通过<strong>自上而下路径 + 横向连接</strong>生成P3, P4, P5（均为256通道）</li>
+</ul>
+</li>
+<li><strong>额外输出（P6-P7）</strong>：<ul>
+<li><strong>直接对C5（stride&#x3D;32）进行3x3卷积 + 步长2下采样</strong>：<ul>
+<li>P6: <code>C5 -&gt; Conv3x3(stride=2)</code> → stride&#x3D;64</li>
+<li>P7: <code>P6 -&gt; ReLU -&gt; Conv3x3(stride=2)</code> → stride&#x3D;128</li>
+</ul>
+</li>
+<li><strong>关键区别</strong>：P6&#x2F;P7的生成<strong>完全独立于FPN的主干路径</strong>，不依赖P5的输出</li>
+</ul>
+</li>
+</ol>
+<p>在MMDetection中，<code>on_input</code>模式的实现核心代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成P6和P7</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable language_">self</span>.add_extra_convs == <span class="string">&#x27;on_input&#x27;</span>:</span><br><span class="line">    extra_source = inputs[<span class="variable language_">self</span>.num_ins - <span class="number">1</span>]  <span class="comment"># 取C5（2048通道）</span></span><br><span class="line">    p6 = <span class="variable language_">self</span>.extra_convs[<span class="number">0</span>](extra_source)   <span class="comment"># 3x3卷积生成P6</span></span><br><span class="line">    p7 = <span class="variable language_">self</span>.extra_convs[<span class="number">1</span>](p6)             <span class="comment"># 3x3卷积生成P7</span></span><br><span class="line">    outs.extend([p6, p7])</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>on_input</code>模式</strong>：额外的高层特征图（P6&#x2F;P7）<strong>直接由骨干网络的最高层特征（C5）通过卷积生成</strong>，与FPN的主路径解耦</p>
+<p>具体那个图可以左转去看另一篇技术blog</p>
+<h1 id="Head"><a href="#Head" class="headerlink" title="Head"></a>Head</h1><p>论文中作者认为 one-stage 算法 head 设计比较关键，对最终性能影响较大，相比于其余 one-stage 算法，RetinaNet 的 Head 模块比较重量级。</p>
+<p>输出头包括分类和检测两个分支，且每个分支都包括 4 个卷积层，不进行参数共享，分类 Head 输出通道是 <code>num_class*K</code>。</p>
+<p>检测 head 输出通道是<code>4*K</code>, K 是 anchor 个数, 虽然每个 Head 的分类和回归分支权重不共享，但是 <strong>5 个输出特征图的 Head 模块权重是共享的</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">bbox_head=<span class="built_in">dict</span>(</span><br><span class="line">    <span class="built_in">type</span>=<span class="string">&#x27;RetinaHead&#x27;</span>,</span><br><span class="line">    </span><br><span class="line">    num_classes=<span class="number">80</span>,</span><br><span class="line">    <span class="comment"># COCO 数据集类别个数</span></span><br><span class="line">    </span><br><span class="line">    in_channels=<span class="number">256</span>,</span><br><span class="line">    <span class="comment"># FPN 层输出特征图通道数 也就是这个head的输入</span></span><br><span class="line">    </span><br><span class="line">    stacked_convs=<span class="number">4</span>,</span><br><span class="line">    <span class="comment"># 每个分支堆叠4层卷积</span></span><br><span class="line">    </span><br><span class="line">    feat_channels=<span class="number">256</span>,</span><br><span class="line">    <span class="comment"># 中间特征图通道数</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#以下的后面说</span></span><br><span class="line">    anchor_generator=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;AnchorGenerator&#x27;</span>,</span><br><span class="line">        octave_base_scale=<span class="number">4</span>,</span><br><span class="line">        scales_per_octave=<span class="number">3</span>,</span><br><span class="line">        ratios=[<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="number">2.0</span>],</span><br><span class="line">        strides=[<span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">64</span>, <span class="number">128</span>]),</span><br><span class="line">    bbox_coder=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;DeltaXYWHBBoxCoder&#x27;</span>,</span><br><span class="line">        target_means=[<span class="number">.0</span>, <span class="number">.0</span>, <span class="number">.0</span>, <span class="number">.0</span>],</span><br><span class="line">        target_stds=[<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>]),</span><br><span class="line">    loss_cls=<span class="built_in">dict</span>(</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&#x27;FocalLoss&#x27;</span>,</span><br><span class="line">        use_sigmoid=<span class="literal">True</span>,</span><br><span class="line">        gamma=<span class="number">2.0</span>,</span><br><span class="line">        alpha=<span class="number">0.25</span>,</span><br><span class="line">        loss_weight=<span class="number">1.0</span>),</span><br><span class="line">    loss_bbox=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;L1Loss&#x27;</span>, loss_weight=<span class="number">1.0</span>)),</span><br></pre></td></tr></table></figure>
+
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">论文精读的内容并没有打上翻译，更多的是我对这一段的总结概括和理解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">版本问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Backbone"><span class="toc-number">2.</span> <span class="toc-text">Backbone</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-out-indices"><span class="toc-number">2.1.</span> <span class="toc-text">(1) out_indices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-frozen-stages"><span class="toc-number">2.2.</span> <span class="toc-text">(2) frozen_stages</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-norm-cfg-%E5%92%8C-norm-eval"><span class="toc-number">2.3.</span> <span class="toc-text">(3) norm_cfg 和 norm_eval</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-style"><span class="toc-number">2.4.</span> <span class="toc-text">(4) style</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Neck"><span class="toc-number">3.</span> <span class="toc-text">Neck</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Head"><span class="toc-number">4.</span> <span class="toc-text">Head</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/RetinaNet%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="RetinaNet 代码详解(MMDetection)">RetinaNet 代码详解(MMDetection)</a><time datetime="2025-04-07T09:49:34.064Z" title="发表于 2025-04-07 17:49:34">2025-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/RetinaNet%20%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" title="RetinaNet 技术剖析">RetinaNet 技术剖析</a><time datetime="2025-04-06T17:45:49.495Z" title="发表于 2025-04-07 01:45:49">2025-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/03/Makefile/" title="非常基础的单目录Makefile">非常基础的单目录Makefile</a><time datetime="2025-04-03T00:21:38.659Z" title="发表于 2025-04-03 08:21:38">2025-04-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/01/MMdetection/" title="MMDetection 初学习">MMDetection 初学习</a><time datetime="2025-04-01T12:14:42.426Z" title="发表于 2025-04-01 20:14:42">2025-04-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/30/FasterRCNN%20-%20%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%8E%B0/" title="Faster R-CNN 代码实现(Pytorch)">Faster R-CNN 代码实现(Pytorch)</a><time datetime="2025-03-30T12:34:15.581Z" title="发表于 2025-03-30 20:34:15">2025-03-30</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

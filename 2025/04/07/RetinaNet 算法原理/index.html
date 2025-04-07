@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RetinaNet 技术剖析 | Self-Improvement</title><meta name="author" content="Vane"><meta name="copyright" content="Vane"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="So Why Fast R-CNN？ one-stage目标检测进行不断的发展，在速度上已经达到了实时性的要求，但是其在精度上与two-stage目标检测算法仍有很大的差距，根据machine learning的知识来说，正负样本数量的失衡对于训练过程产生了负面影响，因此提出了base on Focal Loss的RetinaNet模型 基本结构 ResNet主干网络、FPN特征金字塔、分类子网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RetinaNet 技术剖析">
+<meta property="og:url" content="http://example.com/2025/04/07/RetinaNet%20%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Self-Improvement">
+<meta property="og:description" content="So Why Fast R-CNN？ one-stage目标检测进行不断的发展，在速度上已经达到了实时性的要求，但是其在精度上与two-stage目标检测算法仍有很大的差距，根据machine learning的知识来说，正负样本数量的失衡对于训练过程产生了负面影响，因此提出了base on Focal Loss的RetinaNet模型 基本结构 ResNet主干网络、FPN特征金字塔、分类子网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/touxiang1.jpg">
+<meta property="article:published_time" content="2025-04-06T17:45:49.495Z">
+<meta property="article:modified_time" content="2025-04-06T19:09:16.924Z">
+<meta property="article:author" content="Vane">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="计算机视觉">
+<meta property="article:tag" content="方法分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/touxiang1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RetinaNet 技术剖析",
+  "url": "http://example.com/2025/04/07/RetinaNet%20%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/",
+  "image": "http://example.com/img/touxiang1.jpg",
+  "datePublished": "2025-04-06T17:45:49.495Z",
+  "dateModified": "2025-04-06T19:09:16.924Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Vane",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/07/RetinaNet%20%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RetinaNet 技术剖析',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg1.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Self-Improvement</span></a><a class="nav-page-title" href="/"><span class="site-name">RetinaNet 技术剖析</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RetinaNet 技术剖析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-06T17:45:49.495Z" title="发表于 2025-04-07 01:45:49">2025-04-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-06T19:09:16.924Z" title="更新于 2025-04-07 03:09:16">2025-04-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E5%89%96%E6%9E%90/">技术剖析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img gist" style="background-image: url(/null)"></div><article class="post-content" id="article-container"><h1 id="So-Why-Fast-R-CNN？"><a href="#So-Why-Fast-R-CNN？" class="headerlink" title="So Why Fast R-CNN？"></a>So Why Fast R-CNN？</h1><p> one-stage目标检测进行不断的发展，在速度上已经达到了实时性的要求，但是其在精度上与two-stage目标检测算法仍有很大的差距，根据machine learning的知识来说，正负样本数量的失衡对于训练过程产生了负面影响，因此提出了base on Focal Loss的RetinaNet模型</p>
+<h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><p><img src="/../blogimg/image-20250407015120057.png" alt="image-20250407015120057"></p>
+<p>ResNet主干网络、FPN特征金字塔、分类子网络和边框回归子网络组成。</p>
+<p><strong>主干网络</strong>由 ResNet 与 FPN 共同构成，以实现对目标的特征提取</p>
+<p><strong>分类子网络与边框回归子网络</strong>分别负责对FPN 输出的特征图进行目标分类与位置回归</p>
+<h1 id="Backbone"><a href="#Backbone" class="headerlink" title="Backbone"></a>Backbone</h1><p>Retinanet 的backbone为ResNet网络</p>
+<p>ResNet网络层数大概在18-152层</p>
+<p>主要区别在于采用的残差单元&#x2F;模块不同或者堆叠残差单元&#x2F;模块的数量和比例不同</p>
+<p>论文用的是ResNet50</p>
+<p>两种残差块的结构是如图所示的两种，深一点的网络都是如有吗的1×1卷积的残差连接网络<code>bottleneck</code> 残差块</p>
+<p><img src="/../blogimg/image-20250407015517099.png" alt="image-20250407015517099"></p>
+<p><img src="/../blogimg/image-20250407020357733.png" alt="image-20250407020357733"></p>
+<p>upsample 上采样，这里常用最近邻上采样</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ [A, B],</span><br><span class="line">  [C, D] ]    </span><br></pre></td></tr></table></figure>
+
+<p> 变为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ [A, A, B, B],</span><br><span class="line">  [A, A, B, B],</span><br><span class="line">  [C, C, D, D],</span><br><span class="line">  [C, C, D, D] ]</span><br></pre></td></tr></table></figure>
+
+<h1 id="Neck"><a href="#Neck" class="headerlink" title="Neck"></a>Neck</h1><p>Neck模块即为FPN网络结构。FPN模块接收c3,c4,c5三个特征图，输出P2-P7五个特征图，通道数都是256,stride为(8,16,32,64,128)，其中大stride(特征图小)用于检测大物体，小stride(特征图大)用于检测小物体。P6和P7目的是提供一个大感受野强语义的特征图，有利于大物体和超大物体检测。注意：在RetinaNet的FPN模块中只包括卷积，不包括BN和ReLU。</p>
+<p>在深度学习网络学习到的feature中：</p>
+<p>浅层网络学到的是物理信息:物体的角，边缘，细节信息</p>
+<p>深层网络学到的是语义信息:更加高等级和抽象</p>
+<p>对于定位问题来说这两类特征同样重要</p>
+<p>FPN之前的目标检测算法，多数只采用顶层特征来做预测，所含的细节信息比较粗略，即使采用了特征融合的方法，也一般是采用融合后的特征进行预测的。FPN提出了特征金字塔网络，可以在不同的特征层上独立进行预测。FPN 通过自下向上、自上向下以及横向连接，可以融合不同层的特征图，得到更加丰富的信息。</p>
+<p><img src="/../blogimg/image-20250407021521250.png" alt="image-20250407021521250"></p>
+<p><strong>图(a) 特征化图像金字塔（Featureized Image Pyramid）</strong>：对每一层图像<strong>独立计算特征</strong>（如卷积操作），并基于各层特征分别进行预测</p>
+<p>优点精度高，缺点计算量大</p>
+<p><strong>图(b) 单一特征图（Single Feature Map）</strong>：仅利用<strong>最后一层高层特征</strong>（如ResNet的conv5）进行预测，依赖其强语义信息。</p>
+<p>优点内存占用低，速度快仅需一次前向计算 缺点忽略浅层特征的高分辨率细节，小物体检测能力差。</p>
+<p><strong>图(c) 金字塔特征层次结构（Pyramidal Feature Hierarchy）</strong>：</p>
+<p>在图(b)的基础之上，同时利用低层特征和高层特征，首先在原始图像上面进行深度卷积，然后分别在不同的特征层上面进行预测。优点：在不同的层上面输出对应的目标，不需要经过所有的层才输出对应的目标（即对于有些目标来说，不用进行多余的前向操作），速度更快，又提高了算法的检测性能。缺点：获得的特征不鲁棒，都是一些弱特征（因为很多的特征都是从较浅的层获得的）。</p>
+<p><strong>图(d) 特征金字塔网络（Feature Pyramid Network, FPN）</strong>：</p>
+<p>自下而上：即神经网络的前向传播过程，特征图经过卷积核计算，通常会越变越小。对于ResNet，使用每个阶段的最后一个residual block输出的特征激活输出。对于conv2，conv3，conv4和conv5输出，将这些最后residual block的输出表示为{C2，C3，C4，C5}，如下图所示，并且它们相对于输入图像具有{4, 8, 16, 32} 的步长。由于其庞大的内存占用，不会将conv1纳入金字塔中。<br>自上而下：把更抽象、语义更强的高层特征图进行上采样（upsampling），而横向连接则是将上采样的结果和自底向上生成的相同大小的feature map进行融合（merge）。横向连接的两层特征在空间尺寸相同，这样做可以利用底层定位细节信息。将低分辨率的特征图做2倍上采样（为了简单起见，使用最近邻上采样）。然后通过按元素相加，将上采样映射与相应的自底而上映射合并。这个过程是迭代的，直到生成最终的分辨率图。 为了开始迭代，只需在C5上附加一个1×1卷积层来生成低分辨率图P5。最后，在每个合并的图上附加一个3×3卷积来生成最终的特征映射，这是为了减少上采样的混叠效应。这个最终的特征映射集称为{P2，P3，P4，P5}，分别对应于{C2，C3，C4，C5}，它们具有相同的尺寸。 由于金字塔的所有层次都像传统的特征化图像金字塔一样使用共享分类器&#x2F;回归器，因此在所有特征图中固定特征维度（通道数，记为d），文中设置d &#x3D; 256，因此所有额外的卷积层都有256个通道的输出。<br>（3）横向连接：采用1×1的卷积核进行连接（减少特征图数量）。</p>
+<h1 id="Head"><a href="#Head" class="headerlink" title="Head"></a>Head</h1><p>融合后的特征层送入<code>分类子网络（Class Subnet）</code>和<code>边界框子网络（Box Subnet）</code>中</p>
+<p><code>Retinanet</code> 的 <code>neck</code> 输出 <code>5</code> 个分支，即输出 <code>5</code> 个特征图。<code>head</code> 模块包括分类和位置检测两个分支，每个分支都包括 <code>4</code> 个卷积层，但是 <code>head</code> 模块的这两个分支之间参数不共享，分类 <code>Head</code> 输出通道是 A<em>K，A 是类别数；检测 <code>head</code> 输出通道是 4</em>K, K 是 anchor 个数, 虽然每个 Head 的分类和回归分支权重不共享，但是 <code>5</code> 个输出特征图的 Head 模块权重是共享的。</p>
+<p><img src="/../blogimg/image-20250407022550260.png" alt="image-20250407022550260"></p>
+<h1 id="Focal-Loss"><a href="#Focal-Loss" class="headerlink" title="Focal Loss"></a>Focal Loss</h1><h3 id="Cross-Entropy"><a href="#Cross-Entropy" class="headerlink" title="Cross Entropy"></a>Cross Entropy</h3><p>Focal loss建立在交叉熵损失函数的基础上</p>
+<p>深度学习中我们常使用交叉熵来作为分类任务中训练数据分布和模型预测结果分布间的代价函数</p>
+<p>在深度学习中，以二分类问题为例，其交叉熵损失（<code>CE</code>）函数如下：</p>
+<p><img src="/../blogimg/image-20250407023801053.png" alt="image-20250407023801053"></p>
+<p>其中 p 表示当预测样本等于 1 的概率，则 1−p 表示样本等于 0 的预测概率。</p>
+<p>因为是二分类，所以样本标签 y 取值为 {1,0} ，上式可缩写至如下：</p>
+<p><img src="/../blogimg/image-20250407024029238.png" alt="image-20250407024029238"></p>
+<p>为了方便，用 pt 代表 p ， pt 定义如下</p>
+<p><img src="/../blogimg/image-20250407024053572.png" alt="image-20250407024053572"></p>
+<p>则原式可写成：</p>
+<p><img src="/../blogimg/image-20250407024123730.png" alt="image-20250407024123730"></p>
+<p>前面的交叉熵损失计算都是针对单个样本的，对于<strong>所有样本</strong>，二分类的交叉熵损失计算如下：</p>
+<p><img src="/../blogimg/image-20250407025035052.png" alt="image-20250407025035052"></p>
+<p>其中 m 为正样本个数， n 为负样本个数， N 为样本总数， m+n&#x3D;N 。当样本类别不平衡时，损失函数 L 的分布也会发生倾斜，如 m≪n 时，负样本的损失会在总损失占主导地位。又因为损失函数的倾斜，模型训练过程中也会倾向于样本多的类别，造成模型对少样本类别的性能较差。</p>
+<p>再衍生以下，对于<strong>所有样本</strong>，多分类的交叉熵损失计算如下：</p>
+<p><img src="/../blogimg/image-20250407025119408.png" alt="image-20250407025119408"></p>
+<p>其中， M 表示类别数量， yic 是符号函数，如果样本 i 的真实类别等于 c 取值 1，否则取值 0; pic 表示样本 i 预测为类别 c 的概率。</p>
+<h3 id="Balanced-Cross-Entropy"><a href="#Balanced-Cross-Entropy" class="headerlink" title="Balanced Cross Entropy"></a>Balanced Cross Entropy</h3><p>对于正负样本不平衡的问题，较为普遍的做法是引入 α∈(0,1) 参数来解决，上面公式重写如下：</p>
+<p> <img src="/../blogimg/image-20250407025553767.png" alt="image-20250407025553767"></p>
+<p>对于所有样本，二分类的平衡交叉熵损失函数如下：</p>
+<p><img src="/../blogimg/image-20250407025610764.png" alt="image-20250407025610764"></p>
+<h3 id="Focal-Loss-1"><a href="#Focal-Loss-1" class="headerlink" title="Focal Loss"></a>Focal Loss</h3><p>虽然 α 参数平衡了正负样本（<code>positive/negative examples</code>），但是它并不能区分难易样本（<code>easy/hard examples</code>），而实际上，目标检测中大量的候选目标都是易分样本。这些样本的损失很低，但是由于难易样本数量极不平衡，易分样本的数量相对来讲太多，最终主导了总的损失。而本文的作者认为，易分样本（即，置信度高的样本）对模型的提升效果非常小，模型应该主要关注与那些难分样本（这个假设是有问题的，是 <code>GHM</code> 的主要改进对象）</p>
+<p><code>Focal Loss</code> 作者建议在交叉熵损失函数上加上一个调整因子（<code>modulating factor</code>） (1−pt)γ ，把高置信度 p （易分样本）样本的损失降低一些。<code>Focal Loss</code> 定义如下</p>
+<p><img src="/../blogimg/image-20250407030021315.png" alt="image-20250407030021315"></p>
+<ul>
+<li>当样本被错误分类且 pt 值较小时，调制因子接近于 <code>1</code>，<code>loss</code> 几乎不受影响；当 pt 接近于 <code>1</code>，调质因子（<code>factor</code>）也接近于 <code>0</code>，<strong>容易分类样本的损失被减少了权重</strong>，整体而言，相当于增加了分类不准确样本在损失函数中的权重。</li>
+<li>γ 参数平滑地调整容易样本的权重下降率，当 γ&#x3D;0 时，<code>Focal Loss</code> 等同于 <code>CE Loss</code>。 γ 在增加，调制因子的作用也就增加，实验证明 γ&#x3D;2 时，模型效果最好。</li>
+</ul>
+<p><img src="/../blogimg/image-20250407030641628.png" alt="image-20250407030641628"></p>
+<p><img src="/../blogimg/image-20250407030653461.png" alt="image-20250407030653461"></p>
+</article></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/touxiang1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Vane</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/V-Ane"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">论文精读的内容并没有打上翻译，更多的是我对这一段的总结概括和理解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#So-Why-Fast-R-CNN%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">So Why Fast R-CNN？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">基本结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Backbone"><span class="toc-number">3.</span> <span class="toc-text">Backbone</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Neck"><span class="toc-number">4.</span> <span class="toc-text">Neck</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Head"><span class="toc-number">5.</span> <span class="toc-text">Head</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Focal-Loss"><span class="toc-number">6.</span> <span class="toc-text">Focal Loss</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cross-Entropy"><span class="toc-number">6.0.1.</span> <span class="toc-text">Cross Entropy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Balanced-Cross-Entropy"><span class="toc-number">6.0.2.</span> <span class="toc-text">Balanced Cross Entropy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Focal-Loss-1"><span class="toc-number">6.0.3.</span> <span class="toc-text">Focal Loss</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/RetinaNet%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="RetinaNet 代码详解(MMDetection)">RetinaNet 代码详解(MMDetection)</a><time datetime="2025-04-07T09:49:34.064Z" title="发表于 2025-04-07 17:49:34">2025-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/07/RetinaNet%20%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" title="RetinaNet 技术剖析">RetinaNet 技术剖析</a><time datetime="2025-04-06T17:45:49.495Z" title="发表于 2025-04-07 01:45:49">2025-04-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/03/Makefile/" title="非常基础的单目录Makefile">非常基础的单目录Makefile</a><time datetime="2025-04-03T00:21:38.659Z" title="发表于 2025-04-03 08:21:38">2025-04-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/01/MMdetection/" title="MMDetection 初学习">MMDetection 初学习</a><time datetime="2025-04-01T12:14:42.426Z" title="发表于 2025-04-01 20:14:42">2025-04-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/30/FasterRCNN%20-%20%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%8E%B0/" title="Faster R-CNN 代码实现(Pytorch)">Faster R-CNN 代码实现(Pytorch)</a><time datetime="2025-03-30T12:34:15.581Z" title="发表于 2025-03-30 20:34:15">2025-03-30</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
